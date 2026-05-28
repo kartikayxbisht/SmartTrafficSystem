@@ -1,0 +1,1598 @@
+/* Layout & Main Panels */
+.app-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-darker);
+}
+
+@media (max-width: 968px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Styling */
+.sidebar {
+  background-color: var(--bg-darker);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+@media (max-width: 968px) {
+  .sidebar {
+    height: auto;
+    position: relative;
+    padding: 16px;
+  }
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.nav-item:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.nav-item.active {
+  color: #fff;
+  background: linear-gradient(90deg, var(--primary-glow) 0%, rgba(99, 102, 241, 0.03) 100%);
+  border-left: 3px solid var(--primary);
+  padding-left: 13px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+@media (max-width: 968px) {
+  .sidebar-footer {
+    display: none;
+  }
+}
+
+/* Navbar Styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: rgba(15, 17, 26, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+.nav-title {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  padding: 6px 12px;
+  border-radius: 50px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.system-status.anomaly {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.status-dot.pulsing {
+  animation: pulse-glow 1.5s infinite;
+  --pulse-color: currentColor;
+}
+
+/* Main Dashboard Panel */
+.content-wrapper {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 20px;
+    max-height: none;
+  }
+}
+
+/* Dashboard Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-color-hover);
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: #fff;
+}
+
+.stat-trend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trend-up {
+  color: var(--success);
+}
+
+.trend-down {
+  color: var(--danger);
+}
+
+.stat-icon-wrapper {
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--primary);
+  border: 1px solid var(--border-color);
+}
+
+/* Intersection Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.intersection-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* CSS Intersection Simulation */
+.intersection-simulator {
+  height: 320px;
+  background-color: #11141e;
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Horizontal Road */
+.road-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-color: #1a1e2b;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.road-h::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+/* Vertical Road */
+.road-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background-color: #1a1e2b;
+  transform: translateX(-50%);
+}
+
+.road-v::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-left: 2px dashed rgba(255, 255, 255, 0.2);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Intersection Box */
+.intersection-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  background-color: #252b3e;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+/* Cars inside roads (simple mock dots) */
+.car-dot {
+  position: absolute;
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+  background-color: var(--secondary);
+  box-shadow: 0 0 8px var(--secondary-glow);
+  z-index: 15;
+}
+
+.car-dot.horizontal-1 {
+  top: calc(50% - 15px);
+  animation: drive-h 4s infinite linear;
+}
+
+.car-dot.horizontal-2 {
+  top: calc(50% + 5px);
+  animation: drive-h-reverse 5s infinite linear;
+}
+
+.car-dot.vertical-1 {
+  left: calc(50% - 15px);
+  width: 8px;
+  height: 12px;
+  animation: drive-v 4.5s infinite linear;
+}
+
+.car-dot.vertical-2 {
+  left: calc(50% + 5px);
+  width: 8px;
+  height: 12px;
+  animation: drive-v-reverse 3.5s infinite linear;
+}
+
+@keyframes drive-h {
+  0% {
+    left: -20px;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes drive-h-reverse {
+  0% {
+    right: -20px;
+  }
+
+  100% {
+    right: 100%;
+  }
+}
+
+@keyframes drive-v {
+  0% {
+    top: -20px;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes drive-v-reverse {
+  0% {
+    bottom: -20px;
+  }
+
+  100% {
+    bottom: 100%;
+  }
+}
+
+/* Physical Traffic Lights on Simulator */
+.sim-light {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background-color: #0b0c10;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 20;
+}
+
+.sim-light.north {
+  top: 75px;
+  left: calc(50% - 40px);
+  transform: translateX(-100%);
+}
+
+.sim-light.south {
+  bottom: 75px;
+  left: calc(50% + 40px);
+}
+
+.sim-light.east {
+  top: calc(50% + 40px);
+  right: 75px;
+  flex-direction: row;
+}
+
+.sim-light.west {
+  top: calc(50% - 40px);
+  left: 75px;
+  transform: translateY(-100%);
+  flex-direction: row;
+}
+
+.bulb {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #24242e;
+}
+
+.bulb.red.active {
+  background-color: var(--traffic-red);
+  box-shadow: 0 0 10px var(--traffic-red);
+}
+
+.bulb.yellow.active {
+  background-color: var(--traffic-yellow);
+  box-shadow: 0 0 10px var(--traffic-yellow);
+}
+
+.bulb.green.active {
+  background-color: var(--traffic-green);
+  box-shadow: 0 0 10px var(--traffic-green);
+}
+
+/* Active Timing Signal Dashboard Panel */
+.signal-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 576px) {
+  .signal-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.signal-status-card {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.01);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signal-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.signal-light-hud {
+  display: flex;
+  gap: 8px;
+  background-color: #0b0c10;
+  padding: 6px 12px;
+  border-radius: 8px;
+  align-self: flex-start;
+}
+
+.hud-bulb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.25;
+}
+
+.hud-bulb.active {
+  opacity: 1;
+}
+
+.hud-bulb.red {
+  color: var(--traffic-red);
+}
+
+.hud-bulb.yellow {
+  color: var(--traffic-yellow);
+}
+
+.hud-bulb.green {
+  color: var(--traffic-green);
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.hud-bulb.active .hud-dot {
+  box-shadow: 0 0 8px currentColor;
+}
+
+.progress-track {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--primary);
+  transition: width 1s linear;
+}
+
+/* Quick Actions Sidebar/Right Panel */
+.actions-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.action-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-color-hover);
+}
+
+.action-btn.active-override {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+  animation: pulse-glow 2s infinite;
+  --pulse-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Parking Space Panel styles */
+.parking-container {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .parking-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lot-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.lot-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.lot-tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.lot-tab.active {
+  background-color: var(--primary-glow);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.parking-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 12px;
+  background-color: rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.parking-slot {
+  height: 90px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.parking-slot.available {
+  background-color: rgba(16, 185, 129, 0.04);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--success);
+}
+
+.parking-slot.available:hover {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: var(--success);
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 6px 20px var(--traffic-green-glow);
+}
+
+.parking-slot.occupied {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: var(--danger);
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.parking-slot.occupied:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.15);
+}
+
+.parking-slot.reserved {
+  background-color: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: var(--warning);
+}
+
+.parking-slot.reserved:hover {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: var(--warning);
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 6px 20px var(--traffic-yellow-glow);
+}
+
+.parking-slot.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px var(--primary-glow);
+  background-color: rgba(99, 102, 241, 0.18);
+  transform: scale(1.08) translateY(-4px);
+  z-index: 10;
+}
+
+.slot-number {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+
+.slot-status-text {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+/* Booking Widget Card */
+.booking-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-self: flex-start;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.form-input {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: var(--font-sans);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.primary-btn {
+  background-color: var(--primary);
+  color: #fff;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.primary-btn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Admin controls panel */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 968px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.config-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toggle-label {
+  font-weight: 600;
+}
+
+.toggle-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Custom switch toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2e303d;
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: var(--primary);
+}
+
+input:checked+.slider:before {
+  transform: translateX(20px);
+}
+
+.range-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.range-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.slider-input {
+  width: 100%;
+  accent-color: var(--primary);
+  background: #2e303d;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* System Terminal / Logs */
+.terminal-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.terminal-window {
+  background-color: #050608;
+  border: 1px solid #1c1f2e;
+  border-radius: 8px;
+  padding: 16px;
+  height: 300px;
+  overflow-y: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.terminal-line {
+  line-height: 1.4;
+  color: #38bdf8;
+  /* cyan */
+}
+
+.terminal-line.success {
+  color: var(--success);
+}
+
+.terminal-line.warning {
+  color: var(--warning);
+}
+
+.terminal-line.danger {
+  color: var(--danger);
+}
+
+.terminal-line.info {
+  color: #818cf8;
+}
+
+.terminal-timestamp {
+  color: var(--text-dim);
+  margin-right: 8px;
+}
+
+/* EV Charging Slots & Badges */
+.ev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.parking-slot.charging {
+  background-color: rgba(6, 182, 212, 0.04);
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #22d3ee;
+}
+
+.parking-slot.charging:hover {
+  background-color: rgba(6, 182, 212, 0.12);
+  border-color: #22d3ee;
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+}
+
+.parking-slot.charged {
+  background-color: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.parking-slot.charged:hover {
+  background-color: rgba(16, 185, 129, 0.14);
+  border-color: #34d399;
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+/* EV Battery Progress Bar */
+.battery-container {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.battery-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.battery-fill.charging {
+  background: linear-gradient(90deg, #06b6d4 0%, #22d3ee 100%);
+  animation: charging-pulse 1.5s infinite;
+}
+
+.battery-fill.charged {
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+}
+
+@keyframes charging-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Floating Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  max-width: 320px;
+}
+
+.toast-notification {
+  pointer-events: auto;
+  background: rgba(15, 17, 26, 0.85);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(16px);
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: toast-slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.toast-notification.success {
+  border-left: 4px solid var(--success);
+}
+
+.toast-notification.warning {
+  border-left: 4px solid var(--warning);
+}
+
+.toast-notification.danger {
+  border-left: 4px solid var(--danger);
+}
+
+.toast-notification.info {
+  border-left: 4px solid var(--primary);
+}
+
+.toast-notification.fade-out {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.toast-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.toast-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.toast-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.toast-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.toast-close:hover {
+  color: #fff;
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Auth Screen Styling */
+.auth-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  background-color: var(--bg-darker);
+  overflow: hidden;
+}
+
+.auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(8, 9, 13, 0.95) 75%);
+  z-index: 1;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  animation: auth-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes auth-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-logo-bg {
+  width: 60px;
+  height: 60px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.auth-logo {
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+  filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
+.auth-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-info {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-info h3 {
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.form-info p {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 14px 14px 14px 44px;
+  background: rgba(8, 9, 13, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.input-field input:focus {
+  border-color: var(--primary);
+  background: rgba(8, 9, 13, 0.7);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password:hover {
+  color: #fff;
+}
+
+.login-options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -4px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input {
+  accent-color: var(--primary);
+  width: 15px;
+  height: 15px;
+}
+
+.checkbox-label span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.checkbox-label:hover span {
+  color: #fff;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.auth-btn.primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.auth-btn.primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.auth-btn.primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-footer-toggle {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+.auth-footer-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.auth-footer-toggle button:hover {
+  text-decoration: underline;
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  width: 100%;
+  margin-top: 10px;
+  transition: all var(--transition-fast);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.02);
+  color: #fff;
+  border-color: var(--border-color-hover);
+}
+
+/* Alert Boxes */
+.auth-alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  border: 1px solid transparent;
+}
+
+.auth-alert.error {
+  background-color: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.auth-alert.success {
+  background-color: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+}
+
+/* Mock OTP Badge */
+.mock-otp-panel {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px dashed rgba(6, 182, 212, 0.3);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.mock-otp-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+}
+
+.mock-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #67e8f9;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.mock-code {
+  font-family: var(--font-display), monospace;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #22d3ee;
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+  margin-bottom: 6px;
+}
+
+.mock-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* OTP Boxes Row */
+.otp-input-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.otp-box {
+  width: 50px;
+  height: 54px;
+  background: rgba(8, 9, 13, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.otp-box:focus {
+  border-color: var(--secondary);
+  background: rgba(8, 9, 13, 0.7);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
+  outline: none;
+}
+
+.otp-status-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  margin-bottom: 20px;
+}
+
+.expiry-timer {
+  color: var(--text-muted);
+}
+
+.expiry-timer.warning {
+  color: var(--danger);
+  font-weight: 600;
+  animation: text-pulse 1s infinite;
+}
+
+@keyframes text-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.attempts-badge {
+  color: var(--text-dim);
+}
+
+.resend-section {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.resend-btn {
+  background: transparent;
+  border: none;
+  color: var(--secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.resend-btn:hover:not(.disabled) {
+  text-decoration: underline;
+  color: #22d3ee;
+}
+
+.resend-btn.disabled {
+  color: var(--text-dim);
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: rotate-spin 1s linear infinite;
+}
+
+@keyframes rotate-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
