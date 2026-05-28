@@ -60,6 +60,22 @@ function App() {
     const handleMouseOver = (e) => {
       const target = e.target;
       if (!target) return;
+
+      const isInput = 
+        target.tagName === 'INPUT' || 
+        target.tagName === 'TEXTAREA' || 
+        target.tagName === 'SELECT' || 
+        target.closest('input') || 
+        target.closest('textarea') ||
+        target.closest('select');
+      
+      if (isInput) {
+        if (cursorDotRef.current) cursorDotRef.current.style.opacity = '0';
+        if (cursorRingRef.current) cursorRingRef.current.style.opacity = '0';
+      } else {
+        if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
+        if (cursorRingRef.current) cursorRingRef.current.style.opacity = '1';
+      }
       
       let isInteractive = false;
       try {

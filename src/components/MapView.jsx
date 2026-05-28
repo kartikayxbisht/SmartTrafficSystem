@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Info, Eye, Map as MapIcon, Layers } from 'lucide-react';
-import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF, TrafficLayer } from '@react-google-maps/api';
+import React, { useState, useRef, useCallback } from 'react';
+import { Info, Eye, Map as MapIcon, Layers, Search, X } from 'lucide-react';
+import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF, TrafficLayer, Autocomplete } from '@react-google-maps/api';
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
+const libraries = ['places'];
 
 const containerStyle = {
   width: '100%',
@@ -113,9 +114,84 @@ const MapView = ({
   const [showTraffic, setShowTraffic] = useState(true);
   const [mapType, setMapType] = useState('roadmap');
 
+  // Search states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchedPlace, setSearchedPlace] = useState(null);
+  const [map, setMap] = useState(null);
+  const [autocomplete, setAutocomplete] = useState(null);
+
+  const onMapLoad = useCallback((mapInstance) => {
+    setMap(mapInstance);
+  }, []);
+
+  const onAutocompleteLoad = (autocompleteInstance) => {
+    setAutocomplete(autocompleteInstance);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    
+    if (value.trim().length > 0) {
+      const filtered = markers.filter(m => 
+        m.name.toLowerCase().includes(value.toLowerCase()) || 
+        m.type.toLowerCase().includes(value.toLowerCase()) ||
+        m.details.toLowerCase().includes(value.toLowerCase())
+      );
+      setSearchResults(filtered);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const selectLocalMarker = (marker) => {
+    setSelectedMarker(marker.id);
+    setSearchQuery(marker.name);
+    setSearchResults([]);
+    if (map) {
+      map.panTo(marker.position);
+      map.setZoom(17);
+    }
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        const newPos = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        };
+        if (map) {
+          map.panTo(newPos);
+          map.setZoom(17);
+        }
+        setSearchedPlace({
+          name: place.formatted_address || place.name,
+          position: newPos
+        });
+        setSearchQuery(place.formatted_address || place.name || '');
+        setSearchResults([]);
+      }
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setSearchedPlace(null);
+    setSelectedMarker(null);
+    if (map) {
+      map.panTo(defaultCenter);
+      map.setZoom(16);
+    }
+  };
+
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: apiKey,
+    libraries,
   });
 
   // Dynamic Markers configuration reflecting active simulation telemetry states
@@ -239,7 +315,16 @@ const MapView = ({
     }
   ];
 
-  const activeMarker = selectedMarker ? markers.find(m => m.id === selectedMarker) : null;
+  const activeMarker = selectedMarker === 'searched-place'
+    ? (searchedPlace ? {
+        id: 'searched-place',
+        type: 'search',
+        name: searchedPlace.name,
+        position: searchedPlace.position,
+        color: '#ef4444',
+        details: `Custom searched location coordinates: ${searchedPlace.position.lat.toFixed(4)}, ${searchedPlace.position.lng.toFixed(4)}`
+      } : null)
+    : (selectedMarker ? markers.find(m => m.id === selectedMarker) : null);
 
   return (
     <div className="intersection-card glass-panel" style={{ flexGrow: 1, position: 'relative' }}>
@@ -294,6 +379,110 @@ const MapView = ({
       </div>
 
       <div style={{ position: 'relative', marginTop: '10px', minHeight: '320px', borderRadius: '12px', overflow: 'hidden' }}>
+        {/* Floating Google Places Autocomplete and Telemetry Search Input */}
+        {isLoaded && (
+          <div style={{
+            position: 'absolute',
+            top: '12px',
+            left: '12px',
+            zIndex: 10,
+            width: '280px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(15, 17, 26, 0.85)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.5)'
+            }}>
+              <Search size={14} style={{ color: 'var(--text-dim)', marginRight: '8px', flexShrink: 0 }} />
+              <Autocomplete
+                onLoad={onAutocompleteLoad}
+                onPlaceChanged={onPlaceChanged}
+              >
+                <input
+                  type="text"
+                  placeholder="Search grid nodes or address..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: '#fff',
+                    fontSize: '0.8rem',
+                    width: '200px',
+                    fontFamily: 'var(--font-sans)'
+                  }}
+                />
+              </Autocomplete>
+              {searchQuery && (
+                <button
+                  onClick={clearSearch}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-dim)',
+                    padding: '2px',
+                    marginLeft: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* suggestion dropdown */}
+            {searchResults.length > 0 && (
+              <div style={{
+                background: 'rgba(15, 17, 26, 0.95)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '8px',
+                maxHeight: '180px',
+                overflowY: 'auto',
+                boxShadow: '0 8px 25px rgba(0,0,0,0.6)',
+                zIndex: 20
+              }}>
+                {searchResults.map(result => (
+                  <div
+                    key={result.id}
+                    onClick={() => selectLocalMarker(result)}
+                    style={{
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                      borderBottom: '1px solid rgba(255,255,255,0.03)',
+                      transition: 'background-color 0.2s',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px',
+                      textAlign: 'left'
+                    }}
+                    className="suggestion-item"
+                  >
+                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#fff' }}>
+                      {result.name}
+                    </span>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                      Type: {result.type.toUpperCase()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {loadError && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '320px', backgroundColor: '#0a0c14', textAlign: 'center', padding: '20px' }}>
             <div>
@@ -317,6 +506,7 @@ const MapView = ({
             mapContainerStyle={containerStyle}
             center={defaultCenter}
             zoom={16}
+            onLoad={onMapLoad}
             options={{
               ...mapOptions,
               mapTypeId: mapType
@@ -333,6 +523,23 @@ const MapView = ({
                 onClick={() => setSelectedMarker(marker.id)}
               />
             ))}
+
+            {searchedPlace && (
+              <MarkerF
+                position={searchedPlace.position}
+                icon={{
+                  path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                  fillColor: '#ef4444',
+                  fillOpacity: 1.0,
+                  scale: 1.4,
+                  strokeColor: '#ffffff',
+                  strokeWeight: 1.5,
+                  anchor: window.google ? new window.google.maps.Point(12, 22) : undefined
+                }}
+                title={searchedPlace.name}
+                onClick={() => setSelectedMarker('searched-place')}
+              />
+            )}
 
             {activeMarker && (
               <InfoWindowF
