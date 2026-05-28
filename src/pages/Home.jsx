@@ -40,7 +40,7 @@ const Home = ({
     <div className="content-wrapper animate-fade-in">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h1 style={{ fontSize: '2.5rem', textAlign: 'left', margin: '0', background: 'linear-gradient(135deg, #fff 0%, #a5b4fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Smart Traffic & City Intelligence
+          IntelliPark AI — Smart City Intelligence
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1rem', textAlign: 'left' }}>
           AI-driven urban mobility orchestration and smart parking logistics panel.

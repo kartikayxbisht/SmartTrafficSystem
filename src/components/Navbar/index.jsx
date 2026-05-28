@@ -21,7 +21,7 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
       case 'dashboard': return 'Signal Control Center';
       case 'parking': return 'Parking Logistics';
       case 'admin': return 'System Configuration';
-      default: return 'Smart Traffic System';
+      default: return 'IntelliPark AI';
     }
   };
 

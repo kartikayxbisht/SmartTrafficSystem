@@ -4,7 +4,7 @@ import {
   Cpu,
   MapPin,
   Settings,
-  TrafficCone,
+  Zap,
   LogOut,
   User
 } from 'lucide-react';
@@ -20,8 +20,12 @@ const Sidebar = ({ activeTab, setActiveTab, user, onLogout }) => {
   return (
     <div className="sidebar">
       <div className="brand-section">
-        <TrafficCone className="brand-logo" style={{ color: 'var(--primary)', filter: 'drop-shadow(0 0 8px var(--primary-glow))' }} />
-        <span className="brand-name">TRAFFIC.AI</span>
+        <div className="brand-logo-wrapper">
+          <Zap className="brand-logo" />
+        </div>
+        <span className="brand-name">
+          <span className="brand-intelli">Intelli</span><span className="brand-park">Park</span><span className="brand-ai"> AI</span>
+        </span>
       </div>
 
       <nav style={{ flex: 1 }}>
@@ -107,7 +111,7 @@ const Sidebar = ({ activeTab, setActiveTab, user, onLogout }) => {
       )}
 
       <div className="sidebar-footer">
-        <p>Smart Traffic System</p>
+        <p>IntelliPark AI</p>
         <p style={{ marginTop: '4px', opacity: 0.5 }}>v3.1.2 • AI Orchestrated</p>
       </div>
     </div>
