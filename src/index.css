@@ -208,21 +208,36 @@ button {
     transition: opacity 0.3s ease;
   }
 
+  /* Layer 1: Inner Diamond Core */
   .custom-cursor-dot::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     background-color: var(--secondary); /* Neon Cyan */
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary-glow);
+    transform: translate(-50%, -50%) rotate(45deg);
+    box-shadow: 0 0 8px var(--secondary), 0 0 16px var(--secondary-glow);
     transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
                 height 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
                 background-color 0.2s ease, 
-                box-shadow 0.2s ease;
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+  }
+
+  /* Layer 2: Precision Concentric Circle */
+  .custom-cursor-dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
   }
 
   .custom-cursor-ring {
@@ -231,25 +246,44 @@ button {
     transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
   }
 
+  /* Layer 3: Rotating Ticks Ring */
   .custom-cursor-ring::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 32px;
-    height: 32px;
-    border: 1.5px dashed var(--primary); /* Neon Purple/Indigo dashed border for sci-fi look */
+    width: 28px;
+    height: 28px;
+    border: 1px dashed var(--primary); /* Neon Purple/Indigo dashed border */
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 12px var(--primary-glow);
-    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                border-color 0.3s ease, 
-                border-style 0.3s ease,
-                background-color 0.3s ease, 
-                box-shadow 0.3s ease, 
-                border-radius 0.3s ease;
-    animation: cursor-rotate 12s linear infinite;
+    box-shadow: 0 0 10px var(--primary-glow);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: cursor-rotate 16s linear infinite;
+  }
+
+  /* Layer 4: Tactical HUD Target Corner Brackets */
+  .custom-cursor-ring::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 42px;
+    height: 42px;
+    transform: translate(-50%, -50%);
+    background: 
+      linear-gradient(to right, var(--primary) 5px, transparent 5px) no-repeat top left,
+      linear-gradient(to bottom, var(--primary) 5px, transparent 5px) no-repeat top left,
+      linear-gradient(to left, var(--primary) 5px, transparent 5px) no-repeat top right,
+      linear-gradient(to bottom, var(--primary) 5px, transparent 5px) no-repeat top right,
+      linear-gradient(to right, var(--primary) 5px, transparent 5px) no-repeat bottom left,
+      linear-gradient(to top, var(--primary) 5px, transparent 5px) no-repeat bottom left,
+      linear-gradient(to left, var(--primary) 5px, transparent 5px) no-repeat bottom right,
+      linear-gradient(to top, var(--primary) 5px, transparent 5px) no-repeat bottom right;
+    background-size: 100% 100%;
+    opacity: 0.65;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    animation: target-scan 4s ease-in-out infinite alternate;
   }
 
   @keyframes cursor-rotate {
@@ -261,61 +295,129 @@ button {
     }
   }
 
-  /* Hover State - Inner dot expands and shines white; outer ring scales up, pulses, and glows cyan */
-  .custom-cursor-ring.hovered::after {
-    width: 56px;
-    height: 56px;
-    border-color: var(--secondary);
-    border-style: solid; /* Becomes solid border */
-    background-color: rgba(6, 182, 212, 0.08); /* Transparent neon cyan fill */
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), inset 0 0 10px rgba(6, 182, 212, 0.15);
-    animation: cursor-pulse 1.5s ease-in-out infinite alternate, cursor-rotate-fast 4s linear infinite;
+  @keyframes target-scan {
+    0% {
+      transform: translate(-50%, -50%) scale(0.95);
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.05);
+      opacity: 0.8;
+    }
   }
 
+  /* Hover State - Inner Diamond core expands and glows white */
   .custom-cursor-dot.hovered::after {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     background-color: #ffffff;
     box-shadow: 0 0 15px #ffffff, 0 0 30px var(--secondary);
+    transform: translate(-50%, -50%) rotate(135deg); /* Rotates to show action */
+  }
+
+  /* Inner precision circle expands, turns cyan and glows */
+  .custom-cursor-dot.hovered::before {
+    width: 22px;
+    height: 22px;
+    border-color: var(--secondary);
+    box-shadow: 0 0 8px var(--secondary-glow);
+  }
+
+  /* Rotating ring scales up and turns cyan */
+  .custom-cursor-ring.hovered::after {
+    width: 48px;
+    height: 48px;
+    border-color: var(--secondary);
+    border-style: solid;
+    box-shadow: 0 0 15px var(--secondary-glow);
+    animation: cursor-rotate-fast 4s linear infinite;
+  }
+
+  /* Corner brackets expand, turn cyan, and lock onto target */
+  .custom-cursor-ring.hovered::before {
+    width: 60px;
+    height: 60px;
+    background: 
+      linear-gradient(to right, var(--secondary) 6px, transparent 6px) no-repeat top left,
+      linear-gradient(to bottom, var(--secondary) 6px, transparent 6px) no-repeat top left,
+      linear-gradient(to left, var(--secondary) 6px, transparent 6px) no-repeat top right,
+      linear-gradient(to bottom, var(--secondary) 6px, transparent 6px) no-repeat top right,
+      linear-gradient(to right, var(--secondary) 6px, transparent 6px) no-repeat bottom left,
+      linear-gradient(to top, var(--secondary) 6px, transparent 6px) no-repeat bottom left,
+      linear-gradient(to left, var(--secondary) 6px, transparent 6px) no-repeat bottom right,
+      linear-gradient(to top, var(--secondary) 6px, transparent 6px) no-repeat bottom right;
+    opacity: 1;
+    animation: target-lock 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
   }
 
   @keyframes cursor-rotate-fast {
     0% {
-      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
-      transform: translate(-50%, -50%) scale(1) rotate(360deg);
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 
-  @keyframes cursor-pulse {
+  @keyframes target-lock {
     0% {
-      box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 8px rgba(6, 182, 212, 0.1);
+      transform: translate(-50%, -50%) scale(1.3) rotate(-45deg);
+      opacity: 0;
     }
     100% {
-      box-shadow: 0 0 28px rgba(6, 182, 212, 0.7), inset 0 0 16px rgba(6, 182, 212, 0.3);
+      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      opacity: 1;
     }
   }
 
-  /* Click State - Implodes onto the dot with a high-energy white/cyan flash and contraction */
-  .custom-cursor-ring.clicked::after {
-    width: 22px;
-    height: 22px;
-    border-color: #ffffff;
-    border-style: solid;
-    background-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 35px #ffffff, inset 0 0 12px rgba(255, 255, 255, 0.6);
-    transform: translate(-50%, -50%) scale(0.75);
-    transition: all 0.08s cubic-bezier(0.1, 0.8, 0.3, 1);
-    animation: none;
-  }
-
+  /* Click State - Diamond core snaps to a solid white center dot */
   .custom-cursor-dot.clicked::after {
     width: 4px;
     height: 4px;
     background-color: #ffffff;
-    box-shadow: 0 0 12px #ffffff;
+    box-shadow: 0 0 10px #ffffff;
+    transform: translate(-50%, -50%) rotate(45deg);
     transition: all 0.08s cubic-bezier(0.1, 0.8, 0.3, 1);
+  }
+
+  /* Circle collapses onto the core */
+  .custom-cursor-dot.clicked::before {
+    width: 8px;
+    height: 8px;
+    border-color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    transition: all 0.08s cubic-bezier(0.1, 0.8, 0.3, 1);
+  }
+
+  /* Rotating ticks ring implodes */
+  .custom-cursor-ring.clicked::after {
+    width: 16px;
+    height: 16px;
+    border-color: #ffffff;
+    border-style: solid;
+    box-shadow: 0 0 20px #ffffff;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all 0.08s cubic-bezier(0.1, 0.8, 0.3, 1);
+    animation: none;
+  }
+
+  /* Corner brackets implode, framing the clicked core */
+  .custom-cursor-ring.clicked::before {
+    width: 24px;
+    height: 24px;
+    background: 
+      linear-gradient(to right, #ffffff 4px, transparent 4px) no-repeat top left,
+      linear-gradient(to bottom, #ffffff 4px, transparent 4px) no-repeat top left,
+      linear-gradient(to left, #ffffff 4px, transparent 4px) no-repeat top right,
+      linear-gradient(to bottom, #ffffff 4px, transparent 4px) no-repeat top right,
+      linear-gradient(to right, #ffffff 4px, transparent 4px) no-repeat bottom left,
+      linear-gradient(to top, #ffffff 4px, transparent 4px) no-repeat bottom left,
+      linear-gradient(to left, #ffffff 4px, transparent 4px) no-repeat bottom right,
+      linear-gradient(to top, #ffffff 4px, transparent 4px) no-repeat bottom right;
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: all 0.08s cubic-bezier(0.1, 0.8, 0.3, 1);
+    animation: none;
   }
 }
 
