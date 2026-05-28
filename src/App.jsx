@@ -14,7 +14,7 @@ import Dashboard from './pages/Dashboard';
 import Parking from './pages/Parking';
 import Admin from './pages/Admin';
 import Footer from './components/Footer';
-import Auth from './pages/Auth';
+import LoginPortal from './pages/LoginPortal';
 import './App.css';
 
 const INDIA_CITIES = {
@@ -393,7 +393,23 @@ const INDIA_CITIES = {
 };
 
 function App() {
+  // Role-based auth
+  const [role, setRole] = useState(null); // null | 'admin' | 'user'
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
+
+  const handleLogin = (selectedRole, userData) => {
+    setRole(selectedRole);
+    setLoggedInUser(userData);
+    setActiveTab(selectedRole === 'admin' ? 'dashboard' : 'home');
+  };
+
+  const handleLogout = () => {
+    setRole(null);
+    setLoggedInUser(null);
+    setActiveTab('home');
+  };
+
   const token = 'mock-token'; // Fallback token since auth was removed
 
   // Custom Cursor Eyecatcher Refs and States
@@ -1365,6 +1381,20 @@ function App() {
     }
   };
 
+  // Show login portal if not authenticated
+  if (!role) {
+    return (
+      <>
+        {/* Ambient Cursor Effects on Login Page too */}
+        <div ref={cursorRingRef} className={`custom-cursor-aura ${cursorHovered ? 'hovered' : ''} ${cursorClicked ? 'clicked' : ''}`}></div>
+        {ripples.map((ripple) => (
+          <span key={ripple.id} className="click-ripple" style={{ left: ripple.x, top: ripple.y }} />
+        ))}
+        <LoginPortal onLogin={handleLogin} />
+      </>
+    );
+  }
+
   return (
     <div className="app-container">
       {/* Ambient Cyber-Glow Aura trailing standard OS cursor */}
@@ -1382,7 +1412,7 @@ function App() {
         />
       ))}
 
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} role={role} loggedInUser={loggedInUser} onLogout={handleLogout} />
       <div className="main-content">
         <Navbar 
           activeTab={activeTab} 
@@ -1390,6 +1420,7 @@ function App() {
           selectedCityName={selectedCityName}
           setSelectedCityName={setSelectedCityName}
           INDIA_CITIES={INDIA_CITIES}
+          role={role}
         />
         {renderContent()}
         <Footer />

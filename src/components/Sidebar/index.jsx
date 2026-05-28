@@ -6,16 +6,21 @@ import {
   Settings,
   Zap,
   LogOut,
-  User
 } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab, user, onLogout }) => {
-  const menuItems = [
-    { id: 'home', label: 'Overview', icon: Home },
-    { id: 'dashboard', label: 'Signal Controls', icon: Cpu },
-    { id: 'parking', label: 'Smart Parking', icon: MapPin },
-    { id: 'admin', label: 'Configuration', icon: Settings },
-  ];
+const ALL_MENU_ITEMS = [
+  { id: 'home',      label: 'Overview',       icon: Home,     roles: ['user'] },
+  { id: 'dashboard', label: 'Signal Controls', icon: Cpu,      roles: ['admin'] },
+  { id: 'parking',   label: 'Smart Parking',   icon: MapPin,   roles: ['user'] },
+  { id: 'admin',     label: 'Configuration',   icon: Settings, roles: ['user'] },
+];
+
+const Sidebar = ({ activeTab, setActiveTab, role, loggedInUser, onLogout }) => {
+  const menuItems = ALL_MENU_ITEMS.filter(item => item.roles.includes(role));
+
+  const initials = loggedInUser?.name
+    ? loggedInUser.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+    : '?';
 
   return (
     <div className="sidebar">
@@ -27,6 +32,19 @@ const Sidebar = ({ activeTab, setActiveTab, user, onLogout }) => {
           <span className="brand-intelli">Intelli</span><span className="brand-park">Park</span><span className="brand-ai"> AI</span>
         </span>
       </div>
+
+      {/* Logged-in user info */}
+      {loggedInUser && (
+        <div className="sidebar-user-info">
+          <div className={`sidebar-user-avatar sidebar-user-avatar--${role}`}>
+            {initials}
+          </div>
+          <div style={{ overflow: 'hidden' }}>
+            <div className="sidebar-user-name">{loggedInUser.name}</div>
+            <div className="sidebar-user-role">{role === 'admin' ? '🛡️ Admin' : '👤 User'}</div>
+          </div>
+        </div>
+      )}
 
       <nav style={{ flex: 1 }}>
         <ul className="nav-links">
@@ -48,66 +66,12 @@ const Sidebar = ({ activeTab, setActiveTab, user, onLogout }) => {
         </ul>
       </nav>
 
-      {user && (
-        <div style={{
-          padding: '16px 12px',
-          borderTop: '1px solid var(--border-color)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-          marginBottom: '16px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--primary)',
-              flexShrink: 0
-            }}>
-              <User size={16} />
-            </div>
-            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff', margin: 0 }}>{user.name}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={onLogout}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              width: '100%',
-              padding: '8px',
-              backgroundColor: 'rgba(239, 68, 68, 0.08)',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-              borderRadius: '6px',
-              color: '#fca5a5',
-              fontSize: '0.8rem',
-              fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
-              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
-              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.2)';
-            }}
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
-        </div>
+      {/* Logout */}
+      {onLogout && (
+        <button className="sidebar-logout-btn" onClick={onLogout}>
+          <LogOut size={15} />
+          <span>Sign Out</span>
+        </button>
       )}
 
       <div className="sidebar-footer">

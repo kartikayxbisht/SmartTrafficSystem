@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Calendar } from 'lucide-react';
+import { ShieldCheck, Calendar, User } from 'lucide-react';
 
-const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityName, INDIA_CITIES }) => {
+const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityName, INDIA_CITIES, role }) => {
   const [timeString, setTimeString] = useState('');
 
   // Clock tick
@@ -29,9 +29,10 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
     <header className="navbar">
       <h2 className="nav-title">{getPageTitle()}</h2>
       
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-        {/* India City Selector Dropdown */}
-        {INDIA_CITIES && (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+
+        {/* STATE Selector — Admin only */}
+        {role === 'admin' && INDIA_CITIES && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>STATE:</span>
             <select 
@@ -67,6 +68,14 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
           <Calendar size={14} />
           <span>{timeString}</span>
         </div>
+
+        {/* Role Badge */}
+        {role && (
+          <div className={`role-badge role-badge--${role}`}>
+            {role === 'admin' ? <ShieldCheck size={12} /> : <User size={12} />}
+            <span>{role === 'admin' ? 'Admin' : 'User'}</span>
+          </div>
+        )}
 
         {/* Status Badge */}
         <div 
