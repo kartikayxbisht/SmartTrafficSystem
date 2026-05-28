@@ -654,54 +654,92 @@ function App() {
     return () => clearInterval(interval);
   }, [selectedControllerId, socketConnected]);
 
-  // Initial slot layout with EV-enabled ports
-  const initialSlots = {
-    'Lot A': [
-      { id: 'A-01', status: 'occupied' },
-      { id: 'A-02', status: 'charging', isEV: true, chargeLevel: 72 },
-      { id: 'A-03', status: 'occupied' },
-      { id: 'A-04', status: 'available', isEV: true },
-      { id: 'A-05', status: 'occupied' },
-      { id: 'A-06', status: 'occupied' },
-      { id: 'A-07', status: 'available' },
-      { id: 'A-08', status: 'available', isEV: true },
-      { id: 'A-09', status: 'reserved' },
-      { id: 'A-10', status: 'available' },
-      { id: 'A-11', status: 'charging', isEV: true, chargeLevel: 34 },
-      { id: 'A-12', status: 'available' },
-      { id: 'A-13', status: 'available' },
-      { id: 'A-14', status: 'occupied' },
-      { id: 'A-15', status: 'available' },
-      { id: 'A-16', status: 'available' },
-    ],
-    'Lot B': [
-      { id: 'B-01', status: 'available', isEV: true },
-      { id: 'B-02', status: 'occupied' },
-      { id: 'B-03', status: 'available' },
-      { id: 'B-04', status: 'occupied' },
-      { id: 'B-05', status: 'available', isEV: true },
-      { id: 'B-06', status: 'available' },
-      { id: 'B-07', status: 'occupied' },
-      { id: 'B-08', status: 'reserved' },
-      { id: 'B-09', status: 'occupied' },
-      { id: 'B-10', status: 'charging', isEV: true, chargeLevel: 89 },
-      { id: 'B-11', status: 'available' },
-      { id: 'B-12', status: 'available' },
-    ],
-    'Lot C': [
-      { id: 'C-01', status: 'occupied' },
-      { id: 'C-02', status: 'occupied' },
-      { id: 'C-03', status: 'occupied' },
-      { id: 'C-04', status: 'reserved' },
-      { id: 'C-05', status: 'available', isEV: true },
-      { id: 'C-06', status: 'occupied' },
-      { id: 'C-07', status: 'available', isEV: true },
-      { id: 'C-08', status: 'occupied' },
-    ]
+  // Generate unique, realistic initial parking slot setups for each city dynamically
+  const generateCitySlots = (cityName) => {
+    const city = INDIA_CITIES[cityName];
+    const initial = {};
+    if (!city) return initial;
+    
+    (city.parkingLots || []).forEach((lot, lotIndex) => {
+      const slotPrefix = lot.name.split(' ').pop(); // e.g. "A", "B", "C"
+      const numSlots = lotIndex === 0 ? 16 : lotIndex === 1 ? 12 : 8;
+      
+      const slots = [];
+      for (let i = 1; i <= numSlots; i++) {
+        const id = `${slotPrefix}-${i < 10 ? '0' + i : i}`;
+        
+        let status = 'available';
+        const rand = (i + lotIndex + cityName.length) % 4; // Add cityName.length to ensure diversity across cities
+        if (rand === 0) status = 'occupied';
+        else if (rand === 1 && i % 3 === 0) status = 'charging';
+        else if (rand === 2 && i % 5 === 0) status = 'reserved';
+        
+        const isEV = i % 2 === 0;
+        const chargeLevel = status === 'charging' ? (20 + (i * 7) % 70) : undefined;
+        
+        slots.push({ id, status, isEV, chargeLevel });
+      }
+      initial[lot.name] = slots;
+    });
+    return initial;
   };
 
-  const [lotsData, setLotsData] = useState(initialSlots);
-  const [bookings, setBookings] = useState({}); // Stores confirmation text per slot
+  // Cache state for all cities' parking slots
+  const [citiesParkingState, setCitiesParkingState] = useState(() => {
+    const initial = {};
+    Object.keys(INDIA_CITIES).forEach(cityName => {
+      initial[cityName] = generateCitySlots(cityName);
+    });
+    return initial;
+  });
+
+  // Cache state for all cities' bookings
+  const [citiesBookingsState, setCitiesBookingsState] = useState(() => {
+    const initial = {};
+    Object.keys(INDIA_CITIES).forEach(cityName => {
+      initial[cityName] = {};
+    });
+    return initial;
+  });
+
+  // Current active city parking lots & bookings
+  const [lotsData, setLotsData] = useState(() => generateCitySlots('New Delhi'));
+  const [bookings, setBookings] = useState({}); // Stores confirmation info per slot for the active city
+
+  const prevCityNameRef = useRef(selectedCityName);
+
+  // Sync parking lots and bookings when city changes
+  useEffect(() => {
+    const prevCity = prevCityNameRef.current;
+    
+    // Save current active state parameters of previous city to cache
+    setCitiesParkingState(prev => ({
+      ...prev,
+      [prevCity]: lotsData
+    }));
+    setCitiesBookingsState(prev => ({
+      ...prev,
+      [prevCity]: bookings
+    }));
+
+    // Load newly selected city's parking lot data and bookings
+    const newCityParking = citiesParkingState[selectedCityName];
+    if (newCityParking) {
+      setLotsData(newCityParking);
+    } else {
+      const generated = generateCitySlots(selectedCityName);
+      setLotsData(generated);
+    }
+
+    const newCityBookings = citiesBookingsState[selectedCityName];
+    if (newCityBookings) {
+      setBookings(newCityBookings);
+    } else {
+      setBookings({});
+    }
+
+    prevCityNameRef.current = selectedCityName;
+  }, [selectedCityName]);
 
   // Lifted Alerts state
   const [alerts, setAlerts] = useState([
@@ -1161,12 +1199,11 @@ function App() {
   const nsLightState = getLightState('NS');
   const ewLightState = getLightState('EW');
 
-  // Compute parking vacancy map
-  const parkingSlotsVacancies = {
-    'Lot A': lotsData['Lot A'].filter(s => s.status === 'available').length,
-    'Lot B': lotsData['Lot B'].filter(s => s.status === 'available').length,
-    'Lot C': lotsData['Lot C'].filter(s => s.status === 'available').length,
-  };
+  // Compute parking vacancy map dynamically
+  const parkingSlotsVacancies = {};
+  Object.entries(lotsData).forEach(([lotName, slots]) => {
+    parkingSlotsVacancies[lotName] = (slots || []).filter(s => s.status === 'available').length;
+  });
 
   const renderContent = () => {
     switch (activeTab) {
