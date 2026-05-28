@@ -97,6 +97,282 @@ const INDIA_CITIES = {
     checkpoints: [
       { id: 'noida-chk-1', name: 'UP Police Border Patrol', position: { lat: 28.6230, lng: 77.3840 }, details: 'Pollution certificate checks under smart telemetry.' }
     ]
+  },
+  'Uttarakhand': {
+    name: 'Uttarakhand',
+    center: { lat: 30.3165, lng: 78.0322 },
+    zoom: 8,
+    controllers: [
+      { id: 'dehradun-isbt', name: 'Dehradun ISBT Junction', position: { lat: 30.2872, lng: 78.0012 }, locationName: 'ISBT Bypass Rd' },
+      { id: 'haridwar-har-ki-pauri', name: 'Haridwar Har Ki Pauri Crossing', position: { lat: 29.9642, lng: 78.1706 }, locationName: 'National Highway 58' },
+      { id: 'rishikesh-lakshman-jhula', name: 'Rishikesh Lakshman Jhula Chowk', position: { lat: 30.1245, lng: 78.3262 }, locationName: 'Badrinath Marg' },
+      { id: 'haldwani-kathgodam', name: 'Haldwani Kathgodam Intersection', position: { lat: 29.2555, lng: 79.5401 }, locationName: 'Nainital Road' },
+      { id: 'roorkee-iit-gate', name: 'Roorkee IIT Main Gate Crossing', position: { lat: 29.8665, lng: 77.8962 }, locationName: 'Civil Lines Rd' },
+      { id: 'nainital-mall-road', name: 'Nainital Tallital Crossing', position: { lat: 29.3820, lng: 79.4582 }, locationName: 'Mall Road South' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 30.3200, lng: 78.0400 } },
+      { name: 'Lot B', position: { lat: 29.9600, lng: 78.1600 } }
+    ],
+    incidents: [
+      { id: 'utk-inc-1', name: 'Rishikesh Tourist Jam', position: { lat: 30.1200, lng: 78.3200 }, details: 'Heavy tourist vehicle inflow.' }
+    ],
+    checkpoints: [
+      { id: 'utk-chk-1', name: 'Haridwar Border Patrol', position: { lat: 29.8000, lng: 77.8500 }, details: 'Green tax verification checkpoint.' }
+    ]
+  },
+  'Jammu and Kashmir': {
+    name: 'Jammu and Kashmir',
+    center: { lat: 34.0837, lng: 74.7973 },
+    zoom: 8,
+    controllers: [
+      { id: 'srinagar-lal-chowk', name: 'Srinagar Lal Chowk Crossing', position: { lat: 34.0722, lng: 74.8111 }, locationName: 'Residency Road' },
+      { id: 'jammu-gandhi-nagar', name: 'Jammu Gandhi Nagar Junction', position: { lat: 32.7095, lng: 74.8682 }, locationName: 'Apsara Road Crossing' },
+      { id: 'anantnag-khanabal', name: 'Anantnag Khanabal Chowk', position: { lat: 33.7431, lng: 75.1299 }, locationName: 'KP Road' },
+      { id: 'baramulla-main', name: 'Baramulla NH Crossing', position: { lat: 34.1982, lng: 74.3592 }, locationName: 'Srinagar-Uri Rd' },
+      { id: 'kathua-highway', name: 'Kathua Toll Plazas Junction', position: { lat: 32.3725, lng: 75.5288 }, locationName: 'NH-44 Corridor' },
+      { id: 'sopore-iqbal-market', name: 'Sopore Iqbal Market Crossing', position: { lat: 34.2952, lng: 74.4789 }, locationName: 'Bypass Road' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 34.0700, lng: 74.8100 } },
+      { name: 'Lot B', position: { lat: 32.7100, lng: 74.8600 } }
+    ],
+    incidents: [
+      { id: 'jk-inc-1', name: 'Srinagar Bypass Slowdown', position: { lat: 34.0500, lng: 74.8300 }, details: 'Adaptive cycle adjusting signal times.' }
+    ],
+    checkpoints: [
+      { id: 'jk-chk-1', name: 'NH-44 Security Checkpost', position: { lat: 32.5000, lng: 75.2000 }, details: 'Smart ANPR checkpoints.' }
+    ]
+  },
+  'Himachal Pradesh': {
+    name: 'Himachal Pradesh',
+    center: { lat: 31.1048, lng: 77.1734 },
+    zoom: 8,
+    controllers: [
+      { id: 'shimla-victory-tunnel', name: 'Shimla Victory Tunnel Crossing', position: { lat: 31.1065, lng: 77.1685 }, locationName: 'Cart Road NH-5' },
+      { id: 'dharamshala-kotwali', name: 'Dharamshala Kotwali Bazaar Crossing', position: { lat: 32.2178, lng: 76.3268 }, locationName: 'Temple Road Junction' },
+      { id: 'manali-mall-road', name: 'Manali Mall Road Crossing', position: { lat: 32.2415, lng: 77.1895 }, locationName: 'Rohtang Highway Bypass' },
+      { id: 'solan-bypass', name: 'Solan Bypass NH-5 Crossing', position: { lat: 30.9082, lng: 77.0911 }, locationName: 'Kumarhatti Bypass' },
+      { id: 'mandi-bus-stand', name: 'Mandi Bus Stand Junction', position: { lat: 31.5902, lng: 76.9212 }, locationName: 'Pathankot-Mandi Highway' },
+      { id: 'hamirpur-gandhi-chowk', name: 'Hamirpur Gandhi Chowk Crossing', position: { lat: 31.6875, lng: 76.5235 }, locationName: 'Main Bazar Road' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 31.1000, lng: 77.1600 } },
+      { name: 'Lot B', position: { lat: 32.2400, lng: 77.1900 } }
+    ],
+    incidents: [
+      { id: 'hp-inc-1', name: 'Shimla Tourist Congestion', position: { lat: 31.1030, lng: 77.1710 }, details: 'Tourist influx adaptive cycles active.' }
+    ],
+    checkpoints: [
+      { id: 'hp-chk-1', name: 'Solan Police Checkpoint', position: { lat: 30.8500, lng: 77.0500 }, details: 'State entry verification checkpoint.' }
+    ]
+  },
+  'Gujarat': {
+    name: 'Gujarat',
+    center: { lat: 23.0225, lng: 72.5714 },
+    zoom: 8,
+    controllers: [
+      { id: 'ahmedabad-iskcon', name: 'Ahmedabad Iskcon Cross Road', position: { lat: 23.0265, lng: 72.5028 }, locationName: 'SG Highway & Iskcon Rd' },
+      { id: 'gandhinagar-ch-3', name: 'Gandhinagar CH-3 Circle Junction', position: { lat: 23.2205, lng: 72.6412 }, locationName: 'K Road & CH Highway' },
+      { id: 'surat-majura-gate', name: 'Surat Majura Gate Crossing', position: { lat: 21.1782, lng: 72.8222 }, locationName: 'Ring Road Interchange' },
+      { id: 'vadodara-alkapuri', name: 'Vadodara Alkapuri Genda Circle', position: { lat: 22.3168, lng: 73.1785 }, locationName: 'RC Dutt Road' },
+      { id: 'rajkot-yagnik-road', name: 'Rajkot Yagnik Road Crossing', position: { lat: 22.2982, lng: 70.7962 }, locationName: 'Dr. Yagnik Road' },
+      { id: 'bhavnagar-ruvapari', name: 'Bhavnagar Ruvapari Road Crossing', position: { lat: 21.7712, lng: 72.1602 }, locationName: 'Highway bypass link' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 23.0250, lng: 72.5000 } },
+      { name: 'Lot B', position: { lat: 21.1800, lng: 72.8300 } }
+    ],
+    incidents: [
+      { id: 'guj-inc-1', name: 'Surat Commuter Jam', position: { lat: 21.1700, lng: 72.8100 }, details: 'Rush hour commuter slowdown.' }
+    ],
+    checkpoints: [
+      { id: 'guj-chk-1', name: 'Gift City Security Gate', position: { lat: 23.1600, lng: 72.6800 }, details: 'Smart ANPR cameras active.' }
+    ]
+  },
+  'Rajasthan': {
+    name: 'Rajasthan',
+    center: { lat: 26.9124, lng: 75.7873 },
+    zoom: 8,
+    controllers: [
+      { id: 'jaipur-rambagh', name: 'Jaipur Rambagh Circle Crossing', position: { lat: 26.8972, lng: 75.8085 }, locationName: 'Tonk Road' },
+      { id: 'jodhpur-sojati-gate', name: 'Jodhpur Sojati Gate Junction', position: { lat: 26.2905, lng: 73.0299 }, locationName: 'Station Road' },
+      { id: 'udaipur-chetak-circle', name: 'Udaipur Chetak Circle Crossing', position: { lat: 24.5932, lng: 73.6892 }, locationName: 'Hospital Road Link' },
+      { id: 'kota-aerodrome', name: 'Kota Aerodrome Circle Junction', position: { lat: 25.1722, lng: 75.8501 }, locationName: 'Jhalawar Road' },
+      { id: 'ajmer-kutchery', name: 'Ajmer Kutchery Road Junction', position: { lat: 26.4682, lng: 74.6342 }, locationName: 'Collectorate Circle' },
+      { id: 'bikaner-soorsagar', name: 'Bikaner Soorsagar Circle Crossing', position: { lat: 28.0195, lng: 73.3152 }, locationName: 'Jaipur Road Link' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 26.9100, lng: 75.8000 } },
+      { name: 'Lot B', position: { lat: 26.2800, lng: 73.0200 } }
+    ],
+    incidents: [
+      { id: 'raj-inc-1', name: 'Jaipur Walled City Congestion', position: { lat: 26.9200, lng: 75.8200 }, details: 'Tourist flow priority routing active.' }
+    ],
+    checkpoints: [
+      { id: 'raj-chk-1', name: 'NH-48 Border Checkpoint', position: { lat: 26.9800, lng: 75.8800 }, details: 'Routine smart registration check.' }
+    ]
+  },
+  'Kolkata': {
+    name: 'Kolkata',
+    center: { lat: 22.5645, lng: 88.3522 },
+    zoom: 14,
+    controllers: [
+      { id: 'kol-esplanade', name: 'Esplanade Metro Junction', position: { lat: 22.5645, lng: 88.3522 }, locationName: 'Chowringhee Road' },
+      { id: 'kol-howrah-bridge', name: 'Howrah Bridge Approach Crossing', position: { lat: 22.5855, lng: 88.3470 }, locationName: 'Brabourne Road' },
+      { id: 'kol-park-street', name: 'Park Street & Camac St Junction', position: { lat: 22.5532, lng: 88.3533 }, locationName: 'Park Street Corridor' },
+      { id: 'kol-gariahat', name: 'Gariahat Crossing', position: { lat: 22.5186, lng: 88.3683 }, locationName: 'Rashbehari Avenue' },
+      { id: 'kol-shyambazar', name: 'Shyambazar Five Point Crossing', position: { lat: 22.6001, lng: 88.3698 }, locationName: 'APC Road' },
+      { id: 'kol-salt-lake', name: 'Salt Lake Sector V Crossing', position: { lat: 22.5735, lng: 88.4331 }, locationName: 'College More Sector V' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 22.5600, lng: 88.3500 } },
+      { name: 'Lot B', position: { lat: 22.5700, lng: 88.4300 } }
+    ],
+    incidents: [
+      { id: 'kol-inc-1', name: 'Shyambazar Slowdown', position: { lat: 22.5990, lng: 88.3680 }, details: 'Bus disruption. Diverting traffic.' }
+    ],
+    checkpoints: [
+      { id: 'kol-chk-1', name: 'Salt Lake Speed Check', position: { lat: 22.5710, lng: 88.4280 }, details: 'Speed radar scan operational.' }
+    ]
+  },
+  'Odisha': {
+    name: 'Odisha',
+    center: { lat: 20.2721, lng: 85.8400 },
+    zoom: 8,
+    controllers: [
+      { id: 'bbsr-master-canteen', name: 'Bhubaneswar Master Canteen Junction', position: { lat: 20.2721, lng: 85.8400 }, locationName: 'Janpath Main Road' },
+      { id: 'cuttack-link-road', name: 'Cuttack Link Road Crossing', position: { lat: 20.4439, lng: 85.8752 }, locationName: 'NH-16 Junction' },
+      { id: 'rkl-bisra-road', name: 'Rourkela Bisra Road Intersection', position: { lat: 22.2269, lng: 84.8519 }, locationName: 'Main Station Road' },
+      { id: 'puri-grand-road', name: 'Puri Grand Road Crossing', position: { lat: 19.8049, lng: 85.8178 }, locationName: 'Bada Danda Marg' },
+      { id: 'sambalpur-golbazar', name: 'Sambalpur Golbazar Crossing', position: { lat: 21.4669, lng: 83.9812 }, locationName: 'G.M. College Road Link' },
+      { id: 'berhampur-kamapalli', name: 'Berhampur Kamapalli Main Crossing', position: { lat: 19.3149, lng: 84.7925 }, locationName: 'Gopalpur Road Link' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 20.2700, lng: 85.8300 } },
+      { name: 'Lot B', position: { lat: 19.8000, lng: 85.8200 } }
+    ],
+    incidents: [
+      { id: 'odi-inc-1', name: 'Cuttack Highway Congestion', position: { lat: 20.4400, lng: 85.8700 }, details: 'Freight traffic build up.' }
+    ],
+    checkpoints: [
+      { id: 'odi-chk-1', name: 'Bhubaneswar Airport Entry', position: { lat: 20.2500, lng: 85.8100 }, details: 'Surveillance checkpost.' }
+    ]
+  },
+  'Chennai': {
+    name: 'Chennai',
+    center: { lat: 13.0418, lng: 80.2341 },
+    zoom: 14,
+    controllers: [
+      { id: 'che-tnagar', name: 'T. Nagar Duraiswamy Road Crossing', position: { lat: 13.0418, lng: 80.2341 }, locationName: 'Usman Road Interchange' },
+      { id: 'che-adyar', name: 'Adyar Junction Crossing', position: { lat: 13.0063, lng: 80.2575 }, locationName: 'Lattice Bridge Rd' },
+      { id: 'che-koyambedu', name: 'Koyambedu Roundtana Crossing', position: { lat: 13.0694, lng: 80.1948 }, locationName: 'Inner Ring Road' },
+      { id: 'che-guindy', name: 'Guindy Kathipara Interchange Link', position: { lat: 13.0067, lng: 80.2206 }, locationName: 'GST Road Interchange' },
+      { id: 'che-mylapore', name: 'Mylapore Luz Corner Crossing', position: { lat: 13.0308, lng: 80.2628 }, locationName: 'Royapettah High Road' },
+      { id: 'che-tambaram', name: 'Tambaram Main Signal Crossing', position: { lat: 12.9229, lng: 80.1275 }, locationName: 'Velachery Main Rd' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 13.0400, lng: 80.2300 } },
+      { name: 'Lot B', position: { lat: 13.0000, lng: 80.2200 } }
+    ],
+    incidents: [
+      { id: 'che-inc-1', name: 'Kathipara Commuter Backlog', position: { lat: 13.0100, lng: 80.2100 }, details: 'Heavy gridlock. Diverting traffic.' }
+    ],
+    checkpoints: [
+      { id: 'che-chk-1', name: 'Tambaram Highway Outpost', position: { lat: 12.9200, lng: 80.1200 }, details: 'Smart emission monitoring active.' }
+    ]
+  },
+  'Hyderabad': {
+    name: 'Hyderabad',
+    center: { lat: 17.4401, lng: 78.3489 },
+    zoom: 14,
+    controllers: [
+      { id: 'hyd-charminar', name: 'Charminar Main Crossing', position: { lat: 17.3616, lng: 78.4747 }, locationName: 'Pathargatti Rd' },
+      { id: 'hyd-gachibowli', name: 'Gachibowli ORR Junction', position: { lat: 17.4401, lng: 78.3489 }, locationName: 'Gachibowli Flyover Ramp' },
+      { id: 'hyd-madhapur', name: 'Madhapur Cyber Towers Crossing', position: { lat: 17.4506, lng: 78.3807 }, locationName: 'Hitech City Road' },
+      { id: 'hyd-secunderabad', name: 'Secunderabad Patny Circle Crossing', position: { lat: 17.4436, lng: 78.4983 }, locationName: 'MG Road' },
+      { id: 'hyd-begumpet', name: 'Begumpet Airport Plaza Junction', position: { lat: 17.4375, lng: 78.4619 }, locationName: 'Begumpet Road' },
+      { id: 'hyd-jubilee', name: 'Jubilee Hills Checkpost Circle', position: { lat: 17.4262, lng: 78.4116 }, locationName: 'Road No 36 Junction' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 17.4400, lng: 78.3800 } },
+      { name: 'Lot B', position: { lat: 17.4400, lng: 78.3500 } }
+    ],
+    incidents: [
+      { id: 'hyd-inc-1', name: 'Madhapur Traffic Peak', position: { lat: 17.4510, lng: 78.3810 }, details: 'Queue optimizer adjusting cycle timings.' }
+    ],
+    checkpoints: [
+      { id: 'hyd-chk-1', name: 'Gachibowli Security Scan', position: { lat: 17.4300, lng: 78.3400 }, details: 'Surveillance cameras active.' }
+    ]
+  },
+  'Madhya Pradesh': {
+    name: 'Madhya Pradesh',
+    center: { lat: 23.2324, lng: 77.4326 },
+    zoom: 8,
+    controllers: [
+      { id: 'bhopal-board-office', name: 'Bhopal Board Office Crossing', position: { lat: 23.2324, lng: 77.4326 }, locationName: 'Link Road 1' },
+      { id: 'indore-rajwada', name: 'Indore Rajwada Palace Chowk', position: { lat: 22.7196, lng: 75.8577 }, locationName: 'MG Road Crossing' },
+      { id: 'gwalior-maharaj-bada', name: 'Gwalior Maharaj Bada Crossing', position: { lat: 26.2039, lng: 78.1576 }, locationName: 'Bada Bazar Road' },
+      { id: 'jabalpur-civic-center', name: 'Jabalpur Civic Center Junction', position: { lat: 23.1678, lng: 79.9328 }, locationName: 'Marhatal Road' },
+      { id: 'ujjain-mahakal', name: 'Ujjain Mahakal Temple Crossing', position: { lat: 23.1827, lng: 75.7682 }, locationName: 'Hari Phatak Overbridge' },
+      { id: 'sagar-teen-batti', name: 'Sagar Teen Batti Crossing', position: { lat: 23.8388, lng: 78.7378 }, locationName: 'Main Market Link' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 23.2300, lng: 77.4300 } },
+      { name: 'Lot B', position: { lat: 22.7200, lng: 75.8600 } }
+    ],
+    incidents: [
+      { id: 'mp-inc-1', name: 'Indore Highway Congestion', position: { lat: 22.7500, lng: 75.8900 }, details: 'Adaptive scheduling active.' }
+    ],
+    checkpoints: [
+      { id: 'mp-chk-1', name: 'Bhopal Security Checkpost', position: { lat: 23.2200, lng: 77.4400 }, details: 'Telemetry verification online.' }
+    ]
+  },
+  'Uttar Pradesh': {
+    name: 'Uttar Pradesh',
+    center: { lat: 26.8467, lng: 80.9462 },
+    zoom: 8,
+    controllers: [
+      { id: 'lucknow-hazratganj', name: 'Lucknow Hazratganj Crossing', position: { lat: 26.8467, lng: 80.9462 }, locationName: 'Vidhan Sabha Marg' },
+      { id: 'kanpur-bada-chauraha', name: 'Kanpur Bada Chauraha Junction', position: { lat: 26.4719, lng: 80.3512 }, locationName: 'Mall Road Link' },
+      { id: 'noida-sec-18', name: 'Noida Sector 18 Crossing', position: { lat: 28.5708, lng: 77.3261 }, locationName: 'Atta Market Corridor' },
+      { id: 'g-noida-pari-chowk', name: 'Greater Noida Pari Chowk Junction', position: { lat: 28.4671, lng: 77.5135 }, locationName: 'Yamuna Expressway Link' },
+      { id: 'ghaziabad-hapur', name: 'Ghaziabad Hapur Chauraha Crossing', position: { lat: 28.6629, lng: 77.4378 }, locationName: 'Grand Trunk Road' },
+      { id: 'varanasi-godowlia', name: 'Varanasi Godowlia Crossing', position: { lat: 25.3082, lng: 83.0039 }, locationName: 'Dashashwamedh Road' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 26.8400, lng: 80.9400 } },
+      { name: 'Lot B', position: { lat: 28.5700, lng: 77.3200 } }
+    ],
+    incidents: [
+      { id: 'up-inc-1', name: 'Varanasi Tourist Influx', position: { lat: 25.3100, lng: 83.0100 }, details: 'Tourist bottleneck. Holding lanes.' }
+    ],
+    checkpoints: [
+      { id: 'up-chk-1', name: 'Noida Border Checkpoint', position: { lat: 28.5900, lng: 77.3000 }, details: 'License plate verification checkpoint.' }
+    ]
+  },
+  'Bihar': {
+    name: 'Bihar',
+    center: { lat: 25.6096, lng: 85.1376 },
+    zoom: 8,
+    controllers: [
+      { id: 'patna-dak-bungalow', name: 'Patna Dak Bungalow Crossing', position: { lat: 25.6096, lng: 85.1376 }, locationName: 'Bailey Road' },
+      { id: 'gaya-gol-bagicha', name: 'Gaya Gol Bagicha Crossing', position: { lat: 24.7955, lng: 84.9994 }, locationName: 'Station Road link' },
+      { id: 'bhagalpur-station', name: 'Bhagalpur Station Chowk Crossing', position: { lat: 25.2445, lng: 87.0135 }, locationName: 'Khalifa Bagh Rd Link' },
+      { id: 'muzaffarpur-kalyani', name: 'Muzaffarpur Kalyani Chowk Junction', position: { lat: 26.1209, lng: 85.3837 }, locationName: 'Saraiyaganj Road' },
+      { id: 'darbhanga-lalbagh', name: 'Darbhanga Lalbagh Crossing', position: { lat: 26.1542, lng: 85.8918 }, locationName: 'Donar Road link' },
+      { id: 'ara-ramna-ground', name: 'Ara Ramna Ground Crossing', position: { lat: 25.5583, lng: 84.6681 }, locationName: 'Arrah Bypass Link' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 25.6100, lng: 85.1400 } },
+      { name: 'Lot B', position: { lat: 24.8000, lng: 85.0000 } }
+    ],
+    incidents: [
+      { id: 'bih-inc-1', name: 'Patna Station Congestion', position: { lat: 25.6050, lng: 85.1300 }, details: 'Rickshaw queue bottleneck. AI adjusting cycles.' }
+    ],
+    checkpoints: [
+      { id: 'bih-chk-1', name: 'Gaya Highway Patrol Gate', position: { lat: 24.7500, lng: 84.9500 }, details: 'Pollution scan operational.' }
+    ]
   }
 };
 
