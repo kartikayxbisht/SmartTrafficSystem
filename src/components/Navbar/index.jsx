@@ -33,7 +33,7 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
         {/* India City Selector Dropdown */}
         {INDIA_CITIES && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>CITY:</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>STATE:</span>
             <select 
               value={selectedCityName} 
               onChange={(e) => setSelectedCityName(e.target.value)}

@@ -57,7 +57,7 @@ const Dashboard = ({
           borderRadius: '10px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)' }}>CITY:</span>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)' }}>STATE:</span>
             <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>{selectedCityName}</span>
           </div>
           
