@@ -12,8 +12,8 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 37.7749,
-  lng: -122.4194,
+  lat: 28.6304,
+  lng: 77.2177,
 };
 
 // Midnight custom map styling to fit the glassmorphism dark theme
@@ -200,7 +200,7 @@ const MapView = ({
       id: 'junction-a',
       type: 'junction',
       name: 'Intersection A (North-South)',
-      position: { lat: 37.7785, lng: -122.4156 },
+      position: { lat: 28.6328, lng: 77.2198 },
       color: nsLightState === 'green' ? '#10b981' : nsLightState === 'yellow' ? '#f59e0b' : '#ef4444',
       details: `Signal: ${nsLightState.toUpperCase()} | Queue: ${carsNS} cars`,
       icon: {
@@ -216,7 +216,7 @@ const MapView = ({
       id: 'junction-b',
       type: 'junction',
       name: 'Intersection B (East-West)',
-      position: { lat: 37.7764, lng: -122.4194 },
+      position: { lat: 28.6285, lng: 77.2135 },
       color: ewLightState === 'green' ? '#10b981' : ewLightState === 'yellow' ? '#f59e0b' : '#ef4444',
       details: `Signal: ${ewLightState.toUpperCase()} | Queue: ${carsEW} cars`,
       icon: {
@@ -232,7 +232,7 @@ const MapView = ({
       id: 'lot-a',
       type: 'parking',
       name: 'Smart Parking Lot A',
-      position: { lat: 37.7795, lng: -122.4180 },
+      position: { lat: 28.6355, lng: 77.2215 },
       color: '#6366f1',
       details: `${parkingSlots['Lot A'] !== undefined ? parkingSlots['Lot A'] : 8} vacant slots out of 16 bays (Contains 4 Smart EV chargers)`,
       icon: {
@@ -249,7 +249,7 @@ const MapView = ({
       id: 'lot-b',
       type: 'parking',
       name: 'Smart Parking Lot B',
-      position: { lat: 37.7750, lng: -122.4160 },
+      position: { lat: 28.6258, lng: 77.2175 },
       color: '#6366f1',
       details: `${parkingSlots['Lot B'] !== undefined ? parkingSlots['Lot B'] : 5} vacant slots out of 12 bays (Contains 3 Smart EV chargers)`,
       icon: {
@@ -266,7 +266,7 @@ const MapView = ({
       id: 'lot-c',
       type: 'parking',
       name: 'Smart Parking Lot C',
-      position: { lat: 37.7775, lng: -122.4210 },
+      position: { lat: 28.6310, lng: 77.2105 },
       color: '#6366f1',
       details: `${parkingSlots['Lot C'] !== undefined ? parkingSlots['Lot C'] : 2} vacant slots out of 8 bays (Contains 2 Smart EV chargers)`,
       icon: {
@@ -283,7 +283,7 @@ const MapView = ({
       id: 'incident-1',
       type: 'incident',
       name: 'Heavy Congestion Incident',
-      position: { lat: 37.7770, lng: -122.4175 },
+      position: { lat: 28.6315, lng: 77.2162 },
       color: '#ef4444',
       details: 'Congestion spike. AI Adaptive signal controls adjusting timings.',
       icon: {
@@ -300,7 +300,7 @@ const MapView = ({
       id: 'checkpoint-1',
       type: 'checkpoint',
       name: 'Municipal Security Checkpoint',
-      position: { lat: 37.7755, lng: -122.4200 },
+      position: { lat: 28.6288, lng: 77.2210 },
       color: '#06b6d4',
       details: 'Routine telemetry checkpoint active. All parameters normal.',
       icon: {
@@ -405,6 +405,9 @@ const MapView = ({
               <Autocomplete
                 onLoad={onAutocompleteLoad}
                 onPlaceChanged={onPlaceChanged}
+                options={{
+                  componentRestrictions: { country: 'in' }
+                }}
               >
                 <input
                   type="text"
