@@ -403,29 +403,112 @@ function App() {
   const [cursorClicked, setCursorClicked] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      const x = e.clientX;
-      const y = e.clientY;
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-      if (cursorRingRef.current) {
-        cursorRingRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-    };
-
-    const handleMouseDown = () => setCursorClicked(true);
-    const handleMouseUp = () => setCursorClicked(false);
+    // Physics / Position variables
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const dot = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const ring = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const ringVel = { x: 0, y: 0 };
     
-    const handleMouseLeave = () => {
-      if (cursorDotRef.current) cursorDotRef.current.style.opacity = '0';
-      if (cursorRingRef.current) cursorRingRef.current.style.opacity = '0';
-    };
-    const handleMouseEnter = () => {
-      if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
-      if (cursorRingRef.current) cursorRingRef.current.style.opacity = '1';
+    // Smooth Scale state inside the loop
+    let currentScale = 1.0;
+    let isVisible = false;
+    let isOverInput = false;
+    let animationFrameId = null;
+
+    // Synchronous state mirror flags to avoid stale closure state values in RAF loop
+    let isHovered = false;
+    let isClicked = false;
+
+    const updateCursorOpacity = (opacityVal) => {
+      if (cursorDotRef.current) cursorDotRef.current.style.opacity = opacityVal;
+      if (cursorRingRef.current) cursorRingRef.current.style.opacity = opacityVal;
     };
 
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      if (!isVisible && !isOverInput) {
+        isVisible = true;
+        updateCursorOpacity(1);
+      }
+    };
+
+    const handleMouseDown = () => {
+      isClicked = true;
+      setCursorClicked(true);
+    };
+    
+    const handleMouseUp = () => {
+      isClicked = false;
+      setCursorClicked(false);
+    };
+
+    const handleMouseLeave = () => {
+      isVisible = false;
+      updateCursorOpacity(0);
+    };
+
+    const handleMouseEnter = () => {
+      isVisible = true;
+      if (!isOverInput) updateCursorOpacity(1);
+    };
+
+    const tick = () => {
+      // 1. Interpolate Dot (instant follow for perfect accuracy)
+      dot.x = mouse.x;
+      dot.y = mouse.y;
+      if (cursorDotRef.current) {
+        cursorDotRef.current.style.transform = `translate3d(${dot.x}px, ${dot.y}px, 0)`;
+      }
+
+      // 2. Interpolate Ring with spring physics
+      const ease = 0.15;
+      const dx = mouse.x - ring.x;
+      const dy = mouse.y - ring.y;
+
+      ringVel.x = dx * ease;
+      ringVel.y = dy * ease;
+
+      ring.x += ringVel.x;
+      ring.y += ringVel.y;
+
+      if (cursorRingRef.current) {
+        // Calculate velocity magnitude (speed)
+        const speed = Math.sqrt(ringVel.x * ringVel.x + ringVel.y * ringVel.y);
+        
+        // Calculate direction angle of movement
+        const angle = Math.atan2(ringVel.y, ringVel.x);
+        
+        // Squash / stretch factors based on speed (organic teardrop deformation)
+        const maxStretch = 0.45;
+        const stretch = Math.min(speed * 0.05, maxStretch);
+        const scaleX = 1 + stretch;
+        const scaleY = 1 - stretch;
+
+        // Smoothly interpolate scale for hovered / clicked states
+        let targetScale = 1.0;
+        if (isClicked) {
+          targetScale = 0.65;
+        } else if (isHovered) {
+          targetScale = 1.8;
+        }
+
+        currentScale += (targetScale - currentScale) * 0.18;
+
+        const finalScaleX = currentScale * scaleX;
+        const finalScaleY = currentScale * scaleY;
+
+        // Apply translation, rotation of speed vector, and the final scaled matrix
+        cursorRingRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0) rotate(${angle}rad) scale(${finalScaleX}, ${finalScaleY})`;
+      }
+
+      animationFrameId = requestAnimationFrame(tick);
+    };
+
+    // Run tick loop
+    animationFrameId = requestAnimationFrame(tick);
+
+    // Event listeners
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
@@ -444,12 +527,11 @@ function App() {
         target.closest('textarea') ||
         target.closest('select');
       
+      isOverInput = !!isInput;
       if (isInput) {
-        if (cursorDotRef.current) cursorDotRef.current.style.opacity = '0';
-        if (cursorRingRef.current) cursorRingRef.current.style.opacity = '0';
-      } else {
-        if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
-        if (cursorRingRef.current) cursorRingRef.current.style.opacity = '1';
+        updateCursorOpacity(0);
+      } else if (isVisible) {
+        updateCursorOpacity(1);
       }
       
       let isInteractive = false;
@@ -474,12 +556,14 @@ function App() {
           target.closest('.dismiss-btn');
       }
 
+      isHovered = !!isInteractive;
       setCursorHovered(!!isInteractive);
     };
 
     window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
