@@ -17,6 +17,89 @@ import Footer from './components/Footer';
 import Auth from './pages/Auth';
 import './App.css';
 
+const INDIA_CITIES = {
+  'New Delhi': {
+    name: 'New Delhi',
+    center: { lat: 28.6304, lng: 77.2177 },
+    zoom: 16,
+    controllers: [
+      { id: 'delhi-cp-1', name: 'Connaught Place Junction A', position: { lat: 28.6328, lng: 77.2198 }, locationName: 'Outer Circle & Barakhamba Rd' },
+      { id: 'delhi-cp-2', name: 'Connaught Place Junction B', position: { lat: 28.6285, lng: 77.2135 }, locationName: 'Outer Circle & Janpath Rd' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 28.6355, lng: 77.2215 } },
+      { name: 'Lot B', position: { lat: 28.6258, lng: 77.2175 } },
+      { name: 'Lot C', position: { lat: 28.6310, lng: 77.2105 } }
+    ],
+    incidents: [
+      { id: 'delhi-inc-1', name: 'Connaught Place Slow Traffic', position: { lat: 28.6315, lng: 77.2162 }, details: 'Congestion spike. AI Adaptive signal controls adjusting timings.' }
+    ],
+    checkpoints: [
+      { id: 'delhi-chk-1', name: 'Delhi Police Checkpoint', position: { lat: 28.6288, lng: 77.2210 }, details: 'Routine smart telemetry validation active.' }
+    ]
+  },
+  'Mumbai': {
+    name: 'Mumbai',
+    center: { lat: 19.0435, lng: 72.8405 },
+    zoom: 15,
+    controllers: [
+      { id: 'mumbai-bandra-1', name: 'Bandra West Intersection A', position: { lat: 19.0435, lng: 72.8405 }, locationName: 'Bandra Reclamation' },
+      { id: 'mumbai-linking-2', name: 'Linking Road Intersection B', position: { lat: 19.0585, lng: 72.8390 }, locationName: 'Linking Rd & Waterfield Rd' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 19.0410, lng: 72.8440 } },
+      { name: 'Lot B', position: { lat: 19.0610, lng: 72.8360 } },
+      { name: 'Lot C', position: { lat: 19.0645, lng: 72.8240 } }
+    ],
+    incidents: [
+      { id: 'mumbai-inc-1', name: 'Bandra Junction Delay', position: { lat: 19.0505, lng: 72.8410 }, details: 'Minor congestion due to localized delay. AI prioritizing EW lanes.' }
+    ],
+    checkpoints: [
+      { id: 'mumbai-chk-1', name: 'Bandra Police Checkpost', position: { lat: 19.0450, lng: 72.8420 }, details: 'Speed monitoring and signal sync check.' }
+    ]
+  },
+  'Bangalore': {
+    name: 'Bangalore',
+    center: { lat: 12.9176, lng: 77.6244 },
+    zoom: 15,
+    controllers: [
+      { id: 'blr-silk-1', name: 'Silk Board Junction North A', position: { lat: 12.9176, lng: 77.6244 }, locationName: 'Silk Board Flyover Ramp' },
+      { id: 'blr-silk-2', name: 'Silk Board Junction South B', position: { lat: 12.9150, lng: 77.6220 }, locationName: 'Hosur Road Intersection' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 12.9200, lng: 77.6300 } },
+      { name: 'Lot B', position: { lat: 12.9340, lng: 77.6180 } },
+      { name: 'Lot C', position: { lat: 12.9140, lng: 77.6080 } }
+    ],
+    incidents: [
+      { id: 'blr-inc-1', name: 'Silk Board Jam', position: { lat: 12.9165, lng: 77.6235 }, details: 'Heavy gridlock reported. Dispatching green wave overrides.' }
+    ],
+    checkpoints: [
+      { id: 'blr-chk-1', name: 'HSR Ring Rd Checkpoint', position: { lat: 12.9190, lng: 77.6260 }, details: 'AI camera traffic violation scan operational.' }
+    ]
+  },
+  'Noida': {
+    name: 'Noida',
+    center: { lat: 28.6210, lng: 77.3780 },
+    zoom: 15,
+    controllers: [
+      { id: 'noida-62-1', name: 'Sector 62 Crossing A', position: { lat: 28.6225, lng: 77.3810 }, locationName: 'Sector 62 Main Crossing' },
+      { id: 'noida-62-2', name: 'Sector 62 Underpass Crossing B', position: { lat: 28.6185, lng: 77.3755 }, locationName: 'NH-24 Sector 62 Loop' }
+    ],
+    parkingLots: [
+      { name: 'Lot A', position: { lat: 28.6240, lng: 77.3790 } },
+      { name: 'Lot B', position: { lat: 28.6190, lng: 77.3830 } },
+      { name: 'Lot C', position: { lat: 28.6120, lng: 77.3690 } }
+    ],
+    incidents: [
+      { id: 'noida-inc-1', name: 'Fortis Road Lane Closure', position: { lat: 28.6205, lng: 77.3775 }, details: 'Lane restricted on Fortis road. Smart cycles active.' }
+    ],
+    checkpoints: [
+      { id: 'noida-chk-1', name: 'UP Police Border Patrol', position: { lat: 28.6230, lng: 77.3840 }, details: 'Pollution certificate checks under smart telemetry.' }
+    ]
+  }
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const token = 'mock-token'; // Fallback token since auth was removed
@@ -130,6 +213,154 @@ function App() {
   const [carsEW, setCarsEW] = useState(8);
   const [throughput, setThroughput] = useState(1420);
   const timerRef = useRef(null);
+
+  // India City & Traffic Junction Selection States
+  const [selectedCityName, setSelectedCityName] = useState('New Delhi');
+  const [selectedControllerId, setSelectedControllerId] = useState('delhi-cp-1');
+
+  // Cache individual telemetry states for all controllers
+  const [controllersState, setControllersState] = useState(() => {
+    const initial = {};
+    Object.values(INDIA_CITIES).forEach(city => {
+      city.controllers.forEach((ctrl, index) => {
+        initial[ctrl.id] = {
+          phase: index % 2 === 0 ? 'NS-GREEN' : 'EW-GREEN',
+          timeLeft: index % 2 === 0 ? 15 : 12,
+          isOverride: false,
+          overrideTarget: null,
+          carsNS: index % 2 === 0 ? 6 : 4,
+          carsEW: index % 2 === 0 ? 8 : 5,
+          throughput: index % 2 === 0 ? 1420 : 980
+        };
+      });
+    });
+    return initial;
+  });
+
+  const prevControllerIdRef = useRef(selectedControllerId);
+
+  // Sync state variables to state map on controller ID switch
+  useEffect(() => {
+    const prevId = prevControllerIdRef.current;
+    
+    // Save current active state parameters
+    setControllersState(prev => ({
+      ...prev,
+      [prevId]: {
+        phase,
+        timeLeft,
+        isOverride,
+        overrideTarget,
+        carsNS,
+        carsEW,
+        throughput
+      }
+    }));
+
+    // Load selected controller state properties
+    const newState = controllersState[selectedControllerId];
+    if (newState) {
+      setPhase(newState.phase);
+      setTimeLeft(newState.timeLeft);
+      setIsOverride(newState.isOverride);
+      setOverrideTarget(newState.overrideTarget);
+      setCarsNS(newState.carsNS);
+      setCarsEW(newState.carsEW);
+      setThroughput(newState.throughput);
+    }
+
+    prevControllerIdRef.current = selectedControllerId;
+  }, [selectedControllerId]);
+
+  // Switch default controller when city changes
+  useEffect(() => {
+    const cityData = INDIA_CITIES[selectedCityName];
+    if (cityData && cityData.controllers.length > 0) {
+      setSelectedControllerId(cityData.controllers[0].id);
+    }
+  }, [selectedCityName]);
+
+  // Background simulation for inactive controllers (OFFLINE FALLBACK)
+  useEffect(() => {
+    if (socketConnected) return;
+
+    const interval = setInterval(() => {
+      setControllersState(prev => {
+        const next = { ...prev };
+        let updated = false;
+
+        Object.keys(next).forEach(id => {
+          if (id === selectedControllerId) return; // skip active one, handled by active simulator
+
+          const ctrl = next[id];
+          if (ctrl.isOverride) return; // skip if overridden
+
+          updated = true;
+          // Decrement time
+          let nextTimeLeft = ctrl.timeLeft - 1;
+          let nextPhase = ctrl.phase;
+          if (nextTimeLeft <= 0) {
+            switch (ctrl.phase) {
+              case 'NS-GREEN':
+                nextTimeLeft = 3;
+                nextPhase = 'NS-YELLOW';
+                break;
+              case 'NS-YELLOW':
+                nextTimeLeft = 15;
+                nextPhase = 'EW-GREEN';
+                break;
+              case 'EW-GREEN':
+                nextTimeLeft = 3;
+                nextPhase = 'EW-YELLOW';
+                break;
+              case 'EW-YELLOW':
+                nextTimeLeft = 15;
+                nextPhase = 'NS-GREEN';
+                break;
+              default:
+                nextTimeLeft = 15;
+                nextPhase = 'NS-GREEN';
+            }
+          }
+
+          // Cars arriving/departing
+          let nextCarsNS = ctrl.carsNS;
+          let nextCarsEW = ctrl.carsEW;
+          let nextThroughput = ctrl.throughput;
+
+          if (Math.random() > 0.5) {
+            nextCarsNS = Math.min(nextCarsNS + 1, 25);
+          }
+          if (Math.random() > 0.5) {
+            nextCarsEW = Math.min(nextCarsEW + 1, 25);
+          }
+
+          if (nextPhase === 'NS-GREEN') {
+            const removed = Math.min(nextCarsNS, Math.floor(Math.random() * 2) + 1);
+            nextCarsNS -= removed;
+            nextThroughput += removed;
+          } else if (nextPhase === 'EW-GREEN') {
+            const removed = Math.min(nextCarsEW, Math.floor(Math.random() * 2) + 1);
+            nextCarsEW -= removed;
+            nextThroughput += removed;
+          }
+
+          next[id] = {
+            ...ctrl,
+            timeLeft: nextTimeLeft,
+            phase: nextPhase,
+            carsNS: nextCarsNS,
+            carsEW: nextCarsEW,
+            throughput: nextThroughput
+          };
+        });
+
+        return updated ? next : prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [selectedControllerId, socketConnected]);
 
   // Initial slot layout with EV-enabled ports
   const initialSlots = {
@@ -658,6 +889,11 @@ function App() {
             parkingSlots={parkingSlotsVacancies}
             alerts={alerts}
             onDismissAlert={handleDismissAlert}
+            selectedCityName={selectedCityName}
+            selectedControllerId={selectedControllerId}
+            setSelectedControllerId={setSelectedControllerId}
+            INDIA_CITIES={INDIA_CITIES}
+            controllersState={controllersState}
           />
         );
       case 'dashboard':
@@ -674,6 +910,10 @@ function App() {
             ewLightState={ewLightState}
             triggerOverride={triggerOverride}
             releaseOverride={releaseOverride}
+            selectedCityName={selectedCityName}
+            selectedControllerId={selectedControllerId}
+            setSelectedControllerId={setSelectedControllerId}
+            INDIA_CITIES={INDIA_CITIES}
           />
         );
       case 'parking':
@@ -698,6 +938,11 @@ function App() {
             parkingSlots={parkingSlotsVacancies}
             alerts={alerts}
             onDismissAlert={handleDismissAlert}
+            selectedCityName={selectedCityName}
+            selectedControllerId={selectedControllerId}
+            setSelectedControllerId={setSelectedControllerId}
+            INDIA_CITIES={INDIA_CITIES}
+            controllersState={controllersState}
           />
         );
     }
@@ -711,7 +956,13 @@ function App() {
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="main-content">
-        <Navbar activeTab={activeTab} socketConnected={socketConnected} />
+        <Navbar 
+          activeTab={activeTab} 
+          socketConnected={socketConnected} 
+          selectedCityName={selectedCityName}
+          setSelectedCityName={setSelectedCityName}
+          INDIA_CITIES={INDIA_CITIES}
+        />
         {renderContent()}
         <Footer />
       </div>

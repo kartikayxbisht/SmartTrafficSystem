@@ -14,7 +14,21 @@ import {
 import MapView from '../components/MapView';
 import AnalyticsChart from '../components/AnalyticsChart';
 
-const Home = ({ setActiveTab, nsLightState, ewLightState, carsNS, carsEW, parkingSlots, alerts, onDismissAlert }) => {
+const Home = ({ 
+  setActiveTab, 
+  nsLightState, 
+  ewLightState, 
+  carsNS, 
+  carsEW, 
+  parkingSlots, 
+  alerts, 
+  onDismissAlert,
+  selectedCityName,
+  selectedControllerId,
+  setSelectedControllerId,
+  INDIA_CITIES,
+  controllersState
+}) => {
   const stats = [
     { label: 'Overall Efficiency', value: '+34.2%', subtext: 'Compared to baseline', trend: 'up', icon: TrendingUp, color: '#10b981' },
     { label: 'Avg Waiting Time', value: '42s', subtext: '-18s reduction', trend: 'down', icon: Clock, color: '#06b6d4' },
@@ -56,6 +70,11 @@ const Home = ({ setActiveTab, nsLightState, ewLightState, carsNS, carsEW, parkin
       {/* Telemetry and Analytics Graphs */}
       <div className="dashboard-grid">
         <MapView 
+          selectedCityName={selectedCityName}
+          selectedControllerId={selectedControllerId}
+          setSelectedControllerId={setSelectedControllerId}
+          INDIA_CITIES={INDIA_CITIES}
+          controllersState={controllersState}
           nsLightState={nsLightState} 
           ewLightState={ewLightState} 
           carsNS={carsNS} 

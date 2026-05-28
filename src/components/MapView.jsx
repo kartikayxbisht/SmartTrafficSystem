@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Info, Eye, Map as MapIcon, Layers, Search, X } from 'lucide-react';
 import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF, TrafficLayer, Autocomplete } from '@react-google-maps/api';
 
@@ -104,6 +104,11 @@ const mapOptions = {
 };
 
 const MapView = ({ 
+  selectedCityName,
+  selectedControllerId,
+  setSelectedControllerId,
+  INDIA_CITIES,
+  controllersState,
   nsLightState = 'green', 
   ewLightState = 'red', 
   carsNS = 4, 
@@ -124,6 +129,44 @@ const MapView = ({
   const onMapLoad = useCallback((mapInstance) => {
     setMap(mapInstance);
   }, []);
+
+  const cityData = (INDIA_CITIES && INDIA_CITIES[selectedCityName]) || (INDIA_CITIES && Object.values(INDIA_CITIES)[0]);
+
+  // Pan to selected city when it changes
+  useEffect(() => {
+    if (map && cityData) {
+      map.panTo(cityData.center);
+      map.setZoom(cityData.zoom);
+    }
+  }, [map, selectedCityName]);
+
+  // Pan to selected controller when it changes
+  useEffect(() => {
+    if (map && cityData && selectedControllerId) {
+      const activeCtrl = (cityData.controllers || []).find(c => c.id === selectedControllerId);
+      if (activeCtrl) {
+        map.panTo(activeCtrl.position);
+        map.setZoom(17);
+      }
+    }
+  }, [map, selectedControllerId]);
+
+  // Sync info window popups: reset selectedMarker to null when selectedControllerId changes
+  // so that it defaults to selectedControllerId and highlights/opens the InfoWindow.
+  useEffect(() => {
+    if (selectedControllerId) {
+      setSelectedMarker(null);
+    }
+  }, [selectedControllerId]);
+
+  const handleMarkerClick = (marker) => {
+    if (marker.type === 'junction') {
+      setSelectedControllerId(marker.id);
+      setSelectedMarker(null);
+    } else {
+      setSelectedMarker(marker.id);
+    }
+  };
 
   const onAutocompleteLoad = (autocompleteInstance) => {
     setAutocomplete(autocompleteInstance);
@@ -146,7 +189,12 @@ const MapView = ({
   };
 
   const selectLocalMarker = (marker) => {
-    setSelectedMarker(marker.id);
+    if (marker.type === 'junction') {
+      setSelectedControllerId(marker.id);
+      setSelectedMarker(null);
+    } else {
+      setSelectedMarker(marker.id);
+    }
     setSearchQuery(marker.name);
     setSearchResults([]);
     if (map) {
@@ -182,9 +230,9 @@ const MapView = ({
     setSearchResults([]);
     setSearchedPlace(null);
     setSelectedMarker(null);
-    if (map) {
-      map.panTo(defaultCenter);
-      map.setZoom(16);
+    if (map && cityData) {
+      map.panTo(cityData.center);
+      map.setZoom(cityData.zoom);
     }
   };
 
@@ -194,126 +242,116 @@ const MapView = ({
     libraries,
   });
 
-  // Dynamic Markers configuration reflecting active simulation telemetry states
-  const markers = [
-    {
-      id: 'junction-a',
-      type: 'junction',
-      name: 'Intersection A (North-South)',
-      position: { lat: 28.6328, lng: 77.2198 },
-      color: nsLightState === 'green' ? '#10b981' : nsLightState === 'yellow' ? '#f59e0b' : '#ef4444',
-      details: `Signal: ${nsLightState.toUpperCase()} | Queue: ${carsNS} cars`,
-      icon: {
-        path: "M 0,0 m -10,0 a 10,10 0 1,0 20,0 a 10,10 0 1,0 -20,0", // Circle shape
-        fillColor: nsLightState === 'green' ? '#10b981' : nsLightState === 'yellow' ? '#f59e0b' : '#ef4444',
-        fillOpacity: 0.9,
-        scale: 1,
-        strokeColor: '#ffffff',
-        strokeWeight: 2,
-      }
-    },
-    {
-      id: 'junction-b',
-      type: 'junction',
-      name: 'Intersection B (East-West)',
-      position: { lat: 28.6285, lng: 77.2135 },
-      color: ewLightState === 'green' ? '#10b981' : ewLightState === 'yellow' ? '#f59e0b' : '#ef4444',
-      details: `Signal: ${ewLightState.toUpperCase()} | Queue: ${carsEW} cars`,
-      icon: {
-        path: "M 0,0 m -10,0 a 10,10 0 1,0 20,0 a 10,10 0 1,0 -20,0",
-        fillColor: ewLightState === 'green' ? '#10b981' : ewLightState === 'yellow' ? '#f59e0b' : '#ef4444',
-        fillOpacity: 0.9,
-        scale: 1,
-        strokeColor: '#ffffff',
-        strokeWeight: 2,
-      }
-    },
-    {
-      id: 'lot-a',
-      type: 'parking',
-      name: 'Smart Parking Lot A',
-      position: { lat: 28.6355, lng: 77.2215 },
-      color: '#6366f1',
-      details: `${parkingSlots['Lot A'] !== undefined ? parkingSlots['Lot A'] : 8} vacant slots out of 16 bays (Contains 4 Smart EV chargers)`,
-      icon: {
-        path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 3h2v2h-2V5zm0 4h2v4h-2V9z",
-        fillColor: '#6366f1',
-        fillOpacity: 1.0,
-        scale: 1.4,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        anchor: isLoaded && window.google ? new window.google.maps.Point(12, 22) : undefined
-      }
-    },
-    {
-      id: 'lot-b',
-      type: 'parking',
-      name: 'Smart Parking Lot B',
-      position: { lat: 28.6258, lng: 77.2175 },
-      color: '#6366f1',
-      details: `${parkingSlots['Lot B'] !== undefined ? parkingSlots['Lot B'] : 5} vacant slots out of 12 bays (Contains 3 Smart EV chargers)`,
-      icon: {
-        path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 3h2v2h-2V5zm0 4h2v4h-2V9z",
-        fillColor: '#6366f1',
-        fillOpacity: 1.0,
-        scale: 1.4,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        anchor: isLoaded && window.google ? new window.google.maps.Point(12, 22) : undefined
-      }
-    },
-    {
-      id: 'lot-c',
-      type: 'parking',
-      name: 'Smart Parking Lot C',
-      position: { lat: 28.6310, lng: 77.2105 },
-      color: '#6366f1',
-      details: `${parkingSlots['Lot C'] !== undefined ? parkingSlots['Lot C'] : 2} vacant slots out of 8 bays (Contains 2 Smart EV chargers)`,
-      icon: {
-        path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 3h2v2h-2V5zm0 4h2v4h-2V9z",
-        fillColor: '#6366f1',
-        fillOpacity: 1.0,
-        scale: 1.4,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        anchor: isLoaded && window.google ? new window.google.maps.Point(12, 22) : undefined
-      }
-    },
-    {
-      id: 'incident-1',
-      type: 'incident',
-      name: 'Heavy Congestion Incident',
-      position: { lat: 28.6315, lng: 77.2162 },
-      color: '#ef4444',
-      details: 'Congestion spike. AI Adaptive signal controls adjusting timings.',
-      icon: {
-        path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z",
-        fillColor: '#ef4444',
-        fillOpacity: 1.0,
-        scale: 1.2,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        anchor: isLoaded && window.google ? new window.google.maps.Point(12, 12) : undefined
-      }
-    },
-    {
-      id: 'checkpoint-1',
-      type: 'checkpoint',
-      name: 'Municipal Security Checkpoint',
-      position: { lat: 28.6288, lng: 77.2210 },
-      color: '#06b6d4',
-      details: 'Routine telemetry checkpoint active. All parameters normal.',
-      icon: {
-        path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
-        fillColor: '#06b6d4',
-        fillOpacity: 1.0,
-        scale: 1.2,
-        strokeColor: '#ffffff',
-        strokeWeight: 1.5,
-        anchor: isLoaded && window.google ? new window.google.maps.Point(12, 12) : undefined
-      }
+  const getControllerData = (ctrlId) => {
+    if (ctrlId === selectedControllerId) {
+      const activeColor = nsLightState === 'green' ? '#10b981' : nsLightState === 'yellow' ? '#f59e0b' : '#ef4444';
+      return {
+        color: activeColor,
+        details: `Active Junction | Signal: NS-${nsLightState.toUpperCase()}, EW-${ewLightState.toUpperCase()} | Queue: NS:${carsNS}, EW:${carsEW}`
+      };
+    } else {
+      const ctrlState = (controllersState && controllersState[ctrlId]) || { phase: 'NS-GREEN', carsNS: 4, carsEW: 5 };
+      const isNSGreen = ctrlState.phase === 'NS-GREEN';
+      const isNSYellow = ctrlState.phase === 'NS-YELLOW';
+      const isEWGreen = ctrlState.phase === 'EW-GREEN';
+      const isEWYellow = ctrlState.phase === 'EW-YELLOW';
+      
+      const ctrlColor = (isNSGreen || isEWGreen) ? '#10b981' : (isNSYellow || isEWYellow) ? '#f59e0b' : '#ef4444';
+      return {
+        color: ctrlColor,
+        details: `Junction Status | Phase: ${ctrlState.phase} | Queue: NS:${ctrlState.carsNS || 0}, EW:${ctrlState.carsEW || 0}`
+      };
     }
-  ];
+  };
+
+  const markers = [];
+  if (cityData) {
+    // 1. Controllers (junctions)
+    (cityData.controllers || []).forEach(ctrl => {
+      const ctrlData = getControllerData(ctrl.id);
+      const isCtrlSelected = ctrl.id === selectedControllerId;
+      markers.push({
+        id: ctrl.id,
+        type: 'junction',
+        name: ctrl.name,
+        position: ctrl.position,
+        color: ctrlData.color,
+        details: ctrlData.details,
+        icon: {
+          path: "M 0,0 m -10,0 a 10,10 0 1,0 20,0 a 10,10 0 1,0 -20,0",
+          fillColor: ctrlData.color,
+          fillOpacity: 0.9,
+          scale: isCtrlSelected ? 1.4 : 1.0,
+          strokeColor: isCtrlSelected ? '#00ffff' : '#ffffff',
+          strokeWeight: isCtrlSelected ? 4 : 2,
+        }
+      });
+    });
+
+    // 2. Parking Lots
+    (cityData.parkingLots || []).forEach(lot => {
+      const vacant = parkingSlots[lot.name] !== undefined ? parkingSlots[lot.name] : 5;
+      markers.push({
+        id: `lot-${lot.name}`,
+        type: 'parking',
+        name: `Smart Parking ${lot.name}`,
+        position: lot.position,
+        color: '#6366f1',
+        details: `${vacant} vacant slots (Contains EV chargers)`,
+        icon: {
+          path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm-1 3h2v2h-2V5zm0 4h2v4h-2V9z",
+          fillColor: '#6366f1',
+          fillOpacity: 1.0,
+          scale: 1.4,
+          strokeColor: '#ffffff',
+          strokeWeight: 1.5,
+          anchor: isLoaded && window.google ? new window.google.maps.Point(12, 22) : undefined
+        }
+      });
+    });
+
+    // 3. Incidents
+    (cityData.incidents || []).forEach(inc => {
+      markers.push({
+        id: inc.id,
+        type: 'incident',
+        name: inc.name,
+        position: inc.position,
+        color: '#ef4444',
+        details: inc.details,
+        icon: {
+          path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z",
+          fillColor: '#ef4444',
+          fillOpacity: 1.0,
+          scale: 1.2,
+          strokeColor: '#ffffff',
+          strokeWeight: 1.5,
+          anchor: isLoaded && window.google ? new window.google.maps.Point(12, 12) : undefined
+        }
+      });
+    });
+
+    // 4. Checkpoints
+    (cityData.checkpoints || []).forEach(chk => {
+      markers.push({
+        id: chk.id,
+        type: 'checkpoint',
+        name: chk.name,
+        position: chk.position,
+        color: '#06b6d4',
+        details: chk.details,
+        icon: {
+          path: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+          fillColor: '#06b6d4',
+          fillOpacity: 1.0,
+          scale: 1.2,
+          strokeColor: '#ffffff',
+          strokeWeight: 1.5,
+          anchor: isLoaded && window.google ? new window.google.maps.Point(12, 12) : undefined
+        }
+      });
+    });
+  }
 
   const activeMarker = selectedMarker === 'searched-place'
     ? (searchedPlace ? {
@@ -324,7 +362,13 @@ const MapView = ({
         color: '#ef4444',
         details: `Custom searched location coordinates: ${searchedPlace.position.lat.toFixed(4)}, ${searchedPlace.position.lng.toFixed(4)}`
       } : null)
-    : (selectedMarker ? markers.find(m => m.id === selectedMarker) : null);
+    : (selectedMarker === 'none'
+        ? null
+        : (selectedMarker 
+            ? markers.find(m => m.id === selectedMarker) 
+            : markers.find(m => m.id === selectedControllerId)
+          )
+      );
 
   return (
     <div className="intersection-card glass-panel" style={{ flexGrow: 1, position: 'relative' }}>
@@ -507,8 +551,8 @@ const MapView = ({
         {isLoaded && (
           <GoogleMap
             mapContainerStyle={containerStyle}
-            center={defaultCenter}
-            zoom={16}
+            center={cityData ? cityData.center : defaultCenter}
+            zoom={cityData ? cityData.zoom : 16}
             onLoad={onMapLoad}
             options={{
               ...mapOptions,
@@ -523,7 +567,7 @@ const MapView = ({
                 position={marker.position}
                 icon={marker.icon}
                 title={marker.name}
-                onClick={() => setSelectedMarker(marker.id)}
+                onClick={() => handleMarkerClick(marker)}
               />
             ))}
 
@@ -547,7 +591,7 @@ const MapView = ({
             {activeMarker && (
               <InfoWindowF
                 position={activeMarker.position}
-                onCloseClick={() => setSelectedMarker(null)}
+                onCloseClick={() => setSelectedMarker('none')}
               >
                 <div style={{ 
                   color: '#ffffff', 

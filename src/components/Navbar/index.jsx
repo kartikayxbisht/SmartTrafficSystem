@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Calendar } from 'lucide-react';
 
-const Navbar = ({ activeTab, socketConnected }) => {
+const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityName, INDIA_CITIES }) => {
   const [timeString, setTimeString] = useState('');
 
   // Clock tick
@@ -29,7 +29,39 @@ const Navbar = ({ activeTab, socketConnected }) => {
     <header className="navbar">
       <h2 className="nav-title">{getPageTitle()}</h2>
       
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+        {/* India City Selector Dropdown */}
+        {INDIA_CITIES && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>CITY:</span>
+            <select 
+              value={selectedCityName} 
+              onChange={(e) => setSelectedCityName(e.target.value)}
+              style={{
+                background: 'rgba(24, 27, 40, 0.7)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '6px',
+                color: '#fff',
+                fontSize: '0.8rem',
+                padding: '6px 12px',
+                fontFamily: 'var(--font-sans)',
+                outline: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                transition: 'border-color 0.2s'
+              }}
+              onMouseEnter={e => e.target.style.borderColor = 'var(--primary)'}
+              onMouseLeave={e => e.target.style.borderColor = 'var(--border-color)'}
+            >
+              {Object.keys(INDIA_CITIES).map(city => (
+                <option key={city} value={city} style={{ background: 'var(--bg-card)', color: '#fff' }}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* Date Time HUD */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           <Calendar size={14} />

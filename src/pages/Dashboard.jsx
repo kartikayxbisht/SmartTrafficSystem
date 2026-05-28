@@ -25,7 +25,11 @@ const Dashboard = ({
   nsLightState,
   ewLightState,
   triggerOverride,
-  releaseOverride
+  releaseOverride,
+  selectedCityName,
+  selectedControllerId,
+  setSelectedControllerId,
+  INDIA_CITIES
 }) => {
 
   return (
@@ -38,6 +42,58 @@ const Dashboard = ({
           Real-time adaptive intersection status, telemetry feeds, and emergency prioritizations.
         </p>
       </div>
+
+      {/* City and Controller Selector Dropdowns for Indian Junctions */}
+      {INDIA_CITIES && (
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
+          alignItems: 'center',
+          margin: '16px 0 24px 0',
+          padding: '12px 16px',
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid var(--border-color)',
+          borderRadius: '10px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)' }}>CITY:</span>
+            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--secondary)' }}>{selectedCityName}</span>
+          </div>
+          
+          <div style={{ height: '20px', width: '1px', background: 'var(--border-color)' }}></div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexGrow: 1 }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)' }}>ACTIVE CONTROLLER:</span>
+            <select 
+              value={selectedControllerId} 
+              onChange={(e) => setSelectedControllerId(e.target.value)}
+              style={{
+                background: 'rgba(24, 27, 40, 0.8)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '6px',
+                color: '#fff',
+                fontSize: '0.8rem',
+                padding: '6px 12px',
+                fontFamily: 'var(--font-sans)',
+                outline: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                transition: 'border-color 0.2s',
+                minWidth: '220px'
+              }}
+              onMouseEnter={e => e.target.style.borderColor = 'var(--primary)'}
+              onMouseLeave={e => e.target.style.borderColor = 'var(--border-color)'}
+            >
+              {(INDIA_CITIES[selectedCityName]?.controllers || []).map(ctrl => (
+                <option key={ctrl.id} value={ctrl.id} style={{ background: 'var(--bg-card)', color: '#fff' }}>
+                  {ctrl.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
 
       {/* Real-time stats */}
       <div className="stats-grid">
