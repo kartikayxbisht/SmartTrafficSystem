@@ -397,15 +397,14 @@ function App() {
   const token = 'mock-token'; // Fallback token since auth was removed
 
   // Custom Cursor Eyecatcher Refs and States
-  const cursorDotRef = useRef(null);
   const cursorRingRef = useRef(null);
   const [cursorHovered, setCursorHovered] = useState(false);
   const [cursorClicked, setCursorClicked] = useState(false);
+  const [ripples, setRipples] = useState([]);
 
   useEffect(() => {
     // Physics / Position variables
     const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const dot = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const ring = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const ringVel = { x: 0, y: 0 };
     
@@ -420,7 +419,6 @@ function App() {
     let isClicked = false;
 
     const updateCursorOpacity = (opacityVal) => {
-      if (cursorDotRef.current) cursorDotRef.current.style.opacity = opacityVal;
       if (cursorRingRef.current) cursorRingRef.current.style.opacity = opacityVal;
     };
 
@@ -433,9 +431,22 @@ function App() {
       }
     };
 
-    const handleMouseDown = () => {
+    const handleMouseDown = (e) => {
       isClicked = true;
       setCursorClicked(true);
+
+      // Spawn click shockwave ripple at mouse coordinates
+      const newRipple = {
+        id: Date.now() + Math.random(),
+        x: e.clientX,
+        y: e.clientY
+      };
+      setRipples((prev) => [...prev, newRipple]);
+
+      // Automatically clean up ripple from DOM after animation completes (600ms)
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
+      }, 600);
     };
     
     const handleMouseUp = () => {
@@ -454,15 +465,8 @@ function App() {
     };
 
     const tick = () => {
-      // 1. Interpolate Dot (instant follow for perfect accuracy)
-      dot.x = mouse.x;
-      dot.y = mouse.y;
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = `translate3d(${dot.x}px, ${dot.y}px, 0)`;
-      }
-
-      // 2. Interpolate Ring with spring physics
-      const ease = 0.15;
+      // Interpolate Aura position with spring physics
+      const ease = 0.12; // slightly slower trailing for smoother fluid tail feel
       const dx = mouse.x - ring.x;
       const dy = mouse.y - ring.y;
 
@@ -480,25 +484,25 @@ function App() {
         const angle = Math.atan2(ringVel.y, ringVel.x);
         
         // Squash / stretch factors based on speed (organic teardrop deformation)
-        const maxStretch = 0.45;
-        const stretch = Math.min(speed * 0.05, maxStretch);
+        const maxStretch = 0.4;
+        const stretch = Math.min(speed * 0.04, maxStretch);
         const scaleX = 1 + stretch;
         const scaleY = 1 - stretch;
 
         // Smoothly interpolate scale for hovered / clicked states
         let targetScale = 1.0;
         if (isClicked) {
-          targetScale = 0.65;
+          targetScale = 0.7;
         } else if (isHovered) {
-          targetScale = 1.8;
+          targetScale = 1.6;
         }
 
-        currentScale += (targetScale - currentScale) * 0.18;
+        currentScale += (targetScale - currentScale) * 0.15;
 
         const finalScaleX = currentScale * scaleX;
         const finalScaleY = currentScale * scaleY;
 
-        // Apply translation, rotation of speed vector, and the final scaled matrix
+        // Translate the ring to the coordinates, apply movement rotation, and scale
         cursorRingRef.current.style.transform = `translate3d(${ring.x}px, ${ring.y}px, 0) rotate(${angle}rad) scale(${finalScaleX}, ${finalScaleY})`;
       }
 
@@ -1363,9 +1367,20 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* High-Performance Custom Cursor Eyecatcher */}
-      <div ref={cursorDotRef} className={`custom-cursor-dot ${cursorHovered ? 'hovered' : ''} ${cursorClicked ? 'clicked' : ''}`}></div>
-      <div ref={cursorRingRef} className={`custom-cursor-ring ${cursorHovered ? 'hovered' : ''} ${cursorClicked ? 'clicked' : ''}`}></div>
+      {/* Ambient Cyber-Glow Aura trailing standard OS cursor */}
+      <div ref={cursorRingRef} className={`custom-cursor-aura ${cursorHovered ? 'hovered' : ''} ${cursorClicked ? 'clicked' : ''}`}></div>
+
+      {/* Click Shockwave Ripples */}
+      {ripples.map((ripple) => (
+        <span
+          key={ripple.id}
+          className="click-ripple"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+          }}
+        />
+      ))}
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="main-content">

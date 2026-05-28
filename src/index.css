@@ -166,36 +166,19 @@ button {
 }
 
 /* ==========================================
-   ELASTIC JELLY FLUID CUSTOM CURSOR STYLES
+   AMBIENT CYBER-GLOW & SHOCKWAVE STYLES
    ========================================== */
 
-/* Hide native cursor globally on devices with a fine pointer (mouse/trackpad) */
-@media (pointer: fine) {
-  body, 
-  button, 
-  a, 
-  [role="button"], 
-  .nav-item, 
-  .parking-slot, 
-  .stat-card, 
-  .action-btn, 
-  .toast-close, 
-  .dismiss-btn, 
-  .map-container * {
-    cursor: none !important;
-  }
-}
+/* Do NOT hide native cursor, standard pointers remain visible. */
 
-/* Hide cursor elements by default (e.g. on mobile/touchscreen devices) */
-.custom-cursor-dot,
-.custom-cursor-ring {
+/* Hide aura by default (e.g. on mobile/touchscreen devices) */
+.custom-cursor-aura {
   display: none;
 }
 
-/* Enable custom cursor on fine pointer devices */
+/* Enable custom ambient aura on fine pointer devices */
 @media (pointer: fine) {
-  .custom-cursor-dot,
-  .custom-cursor-ring {
+  .custom-cursor-aura {
     display: block;
     position: fixed;
     top: 0;
@@ -203,101 +186,84 @@ button {
     width: 0;
     height: 0;
     pointer-events: none;
-    z-index: 999999;
+    z-index: 999998;
     opacity: 0; /* Starts hidden until mouse moves */
     transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: transform;
   }
 
-  .custom-cursor-ring {
-    z-index: 999998;
-    /* Do NOT transition the transform property, as JS controls transform continuously */
-    transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  /* Inner Precision Core - Razor-sharp glowing white dot */
-  .custom-cursor-dot::after {
+  /* Outer Ambient Glow Light Orb */
+  .custom-cursor-aura::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 4px;
-    height: 4px;
-    background-color: #ffffff;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.4);
-    transition: width 0.25s, height 0.25s, background-color 0.25s, box-shadow 0.25s;
-  }
-
-  .custom-cursor-dot::before {
-    display: none;
-  }
-
-  /* Outer Glassmorphic Jelly Orb */
-  .custom-cursor-ring::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 24px;
-    height: 24px;
-    border: 1px solid rgba(6, 182, 212, 0.35);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.04) 0%, rgba(99, 102, 241, 0.02) 100%);
-    backdrop-filter: blur(2px);
-    box-shadow: 0 0 16px rgba(6, 182, 212, 0.15), inset 0 0 8px rgba(6, 182, 212, 0.05);
-    transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s, backdrop-filter 0.25s;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.04) 100%);
+    filter: blur(8px);
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.12);
+    transition: width 0.3s, height 0.3s, background 0.3s, filter 0.3s, box-shadow 0.3s;
     will-change: width, height;
-  }
-
-  .custom-cursor-ring::before {
-    display: none;
   }
 
   /* ==========================================
      HOVER STATES
      ========================================== */
 
-  /* Inner precision dot shrinks and turns cyan to keep visibility on text/buttons */
-  .custom-cursor-dot.hovered::after {
-    width: 3px;
-    height: 3px;
-    background-color: var(--secondary);
-    box-shadow: 0 0 6px var(--secondary);
-  }
-
-  /* Outer Jelly Orb expands into a high-visibility cyberpunk lens */
-  .custom-cursor-ring.hovered::after {
-    width: 48px;
-    height: 48px;
-    border-color: rgba(6, 182, 212, 0.65);
-    background: rgba(6, 182, 212, 0.08);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 0 24px rgba(6, 182, 212, 0.35), inset 0 0 12px rgba(6, 182, 212, 0.1);
+  /* Aura shifts color to deep indigo and expands slightly behind the active link */
+  .custom-cursor-aura.hovered::after {
+    width: 54px;
+    height: 54px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0.05) 100%);
+    filter: blur(12px);
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.2);
   }
 
   /* ==========================================
      CLICK STATES
      ========================================== */
 
-  /* Inner core point expands on click */
-  .custom-cursor-dot.clicked::after {
-    width: 8px;
-    height: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 0 12px #ffffff;
+  /* Aura briefly shrinks on click */
+  .custom-cursor-aura.clicked::after {
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 100%);
+    filter: blur(4px);
   }
+}
 
-  /* Outer ring compresses tightly around the core dot for click tactile feedback */
-  .custom-cursor-ring.clicked::after {
-    width: 12px;
-    height: 12px;
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(0px);
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+/* ==========================================
+   CLICK SHOCKWAVE RIPPLES
+   ========================================== */
+.click-ripple {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(6, 182, 212, 0.7);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4), inset 0 0 8px rgba(6, 182, 212, 0.2);
+  pointer-events: none;
+  z-index: 999999;
+  transform: scale(1);
+  opacity: 1;
+  animation: click-shockwave 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes click-shockwave {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+    border-color: rgba(6, 182, 212, 0.8);
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+    border-color: rgba(99, 102, 241, 0);
   }
 }
 
