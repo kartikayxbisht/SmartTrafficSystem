@@ -4,12 +4,16 @@ import ParkingCard from '../components/ParkingCard';
 import BookingPanel from '../components/BookingPanel';
 
 const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
+  const availableLots = Object.keys(lotsData);
   const [selectedLot, setSelectedLot] = useState('Lot A');
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [evFilter, setEvFilter] = useState(false);
 
+  const currentLot = availableLots.includes(selectedLot) ? selectedLot : (availableLots[0] || 'Lot A');
+
   // Calculate vacancy metrics and filter by EV status
-  const activeSlots = lotsData[selectedLot].filter(slot => !evFilter || slot.isEV);
+  const currentLotSlots = lotsData[currentLot] || [];
+  const activeSlots = currentLotSlots.filter(slot => !evFilter || slot.isEV);
   const totalSlots = activeSlots.length;
 
   const handleSlotSelect = (slot) => {
@@ -31,12 +35,11 @@ const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
 
       {/* Lot Occupancy statistics */}
       <div className="stats-grid">
-        {['Lot A', 'Lot B', 'Lot C'].map(lot => {
-          const slots = lotsData[lot];
-          const total = slots.length;
-          const available = slots.filter(s => s.status === 'available').length;
-          const occupied = slots.filter(s => s.status === 'occupied').length;
-          const reserved = slots.filter(s => s.status === 'reserved').length;
+        {Object.entries(lotsData).map(([lot, slots]) => {
+          const total = (slots || []).length;
+          const available = (slots || []).filter(s => s.status === 'available').length;
+          const occupied = (slots || []).filter(s => s.status === 'occupied').length;
+          const reserved = (slots || []).filter(s => s.status === 'reserved').length;
           return (
             <ParkingCard 
               key={lot}
@@ -45,7 +48,7 @@ const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
               total={total}
               occupied={occupied}
               reserved={reserved}
-              isActive={selectedLot === lot}
+              isActive={currentLot === lot}
               onClick={() => {
                 setSelectedLot(lot);
                 setSelectedSlot(null);
@@ -61,10 +64,10 @@ const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
         <div className="intersection-card glass-panel" style={{ flexGrow: 1 }}>
           <div className="lot-selector-header">
             <div className="lot-tabs">
-              {['Lot A', 'Lot B', 'Lot C'].map(lot => (
+              {availableLots.map(lot => (
                 <button 
                   key={lot}
-                  className={`lot-tab ${selectedLot === lot ? 'active' : ''}`}
+                  className={`lot-tab ${currentLot === lot ? 'active' : ''}`}
                   onClick={() => {
                     setSelectedLot(lot);
                     setSelectedSlot(null);
@@ -165,12 +168,12 @@ const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
           <BookingPanel 
             selectedSlot={selectedSlot}
-          selectedLot={selectedLot}
-          onSubmit={(bookingDetails) => {
-            onBookSlot(selectedLot, bookingDetails);
-            setSelectedSlot(null);
-          }}
-        />
+            selectedLot={currentLot}
+            onSubmit={(bookingDetails) => {
+              onBookSlot(currentLot, bookingDetails);
+              setSelectedSlot(null);
+            }}
+          />
 
           {/* Active booking listings */}
           {Object.keys(bookings).length > 0 && (
@@ -178,7 +181,9 @@ const Parking = ({ lotsData, bookings, onBookSlot, onStartCharging }) => {
               <h4 style={{ fontSize: '0.85rem', color: '#fff', textAlign: 'left' }}>Active Reservations</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '160px', overflowY: 'auto' }}>
                 {Object.entries(bookings).map(([slotId, info]) => {
-                  const lotName = slotId.startsWith('A-') ? 'Lot A' : slotId.startsWith('B-') ? 'Lot B' : 'Lot C';
+                  const lotName = Object.keys(lotsData).find(name => 
+                    lotsData[name].some(s => s.id === slotId)
+                  ) || 'Lot A';
                   const slotObj = lotsData[lotName]?.find(s => s.id === slotId);
                   const isEvSlot = slotObj?.isEV;
                   const isReserved = slotObj?.status === 'reserved';
