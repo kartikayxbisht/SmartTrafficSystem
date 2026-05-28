@@ -24,7 +24,11 @@ const INDIA_CITIES = {
     zoom: 16,
     controllers: [
       { id: 'delhi-cp-1', name: 'Connaught Place Junction A', position: { lat: 28.6328, lng: 77.2198 }, locationName: 'Outer Circle & Barakhamba Rd' },
-      { id: 'delhi-cp-2', name: 'Connaught Place Junction B', position: { lat: 28.6285, lng: 77.2135 }, locationName: 'Outer Circle & Janpath Rd' }
+      { id: 'delhi-cp-2', name: 'Connaught Place Junction B', position: { lat: 28.6285, lng: 77.2135 }, locationName: 'Outer Circle & Janpath Rd' },
+      { id: 'delhi-cp-3', name: 'Connaught Place Junction C', position: { lat: 28.6295, lng: 77.2240 }, locationName: 'Outer Circle & Kasturba Gandhi Marg' },
+      { id: 'delhi-cp-4', name: 'Connaught Place Junction D', position: { lat: 28.6348, lng: 77.2162 }, locationName: 'Outer Circle & Chelmsford Rd' },
+      { id: 'delhi-cp-5', name: 'Connaught Place Junction E', position: { lat: 28.6310, lng: 77.2215 }, locationName: 'Outer Circle & Minto Rd' },
+      { id: 'delhi-cp-6', name: 'Connaught Place Junction F', position: { lat: 28.6270, lng: 77.2188 }, locationName: 'Outer Circle & Parliament St' }
     ],
     parkingLots: [
       { name: 'Lot A', position: { lat: 28.6355, lng: 77.2215 } },
@@ -44,7 +48,11 @@ const INDIA_CITIES = {
     zoom: 15,
     controllers: [
       { id: 'mumbai-bandra-1', name: 'Bandra West Intersection A', position: { lat: 19.0435, lng: 72.8405 }, locationName: 'Bandra Reclamation' },
-      { id: 'mumbai-linking-2', name: 'Linking Road Intersection B', position: { lat: 19.0585, lng: 72.8390 }, locationName: 'Linking Rd & Waterfield Rd' }
+      { id: 'mumbai-linking-2', name: 'Linking Road Intersection B', position: { lat: 19.0585, lng: 72.8390 }, locationName: 'Linking Rd & Waterfield Rd' },
+      { id: 'mumbai-carter-3', name: 'Carter Road Intersection C', position: { lat: 19.0660, lng: 72.8220 }, locationName: 'Carter Rd & Perry Cross Rd' },
+      { id: 'mumbai-svroad-4', name: 'SV Road Intersection D', position: { lat: 19.0520, lng: 72.8415 }, locationName: 'SV Rd & Turner Rd' },
+      { id: 'mumbai-hillroad-5', name: 'Hill Road Intersection E', position: { lat: 19.0552, lng: 72.8330 }, locationName: 'Hill Rd & St John Baptist Rd' },
+      { id: 'mumbai-reclamation-6', name: 'Bandra Reclamation Crossing F', position: { lat: 19.0405, lng: 72.8465 }, locationName: 'Bandra Reclamation Toll Link' }
     ],
     parkingLots: [
       { name: 'Lot A', position: { lat: 19.0410, lng: 72.8440 } },
@@ -64,7 +72,11 @@ const INDIA_CITIES = {
     zoom: 15,
     controllers: [
       { id: 'blr-silk-1', name: 'Silk Board Junction North A', position: { lat: 12.9176, lng: 77.6244 }, locationName: 'Silk Board Flyover Ramp' },
-      { id: 'blr-silk-2', name: 'Silk Board Junction South B', position: { lat: 12.9150, lng: 77.6220 }, locationName: 'Hosur Road Intersection' }
+      { id: 'blr-silk-2', name: 'Silk Board Junction South B', position: { lat: 12.9150, lng: 77.6220 }, locationName: 'Hosur Road Intersection' },
+      { id: 'blr-silk-3', name: 'Silk Board Junction East C', position: { lat: 12.9185, lng: 77.6265 }, locationName: 'Outer Ring Rd to HSR' },
+      { id: 'blr-silk-4', name: 'Silk Board Junction West D', position: { lat: 12.9160, lng: 77.6200 }, locationName: 'BTM Layout Link' },
+      { id: 'blr-hsr-5', name: 'HSR Layout Sector 7 Crossing E', position: { lat: 12.9130, lng: 77.6320 }, locationName: '14th Main Rd & 19th Cross' },
+      { id: 'blr-btm-6', name: 'BTM Layout 2nd Stage Junction F', position: { lat: 12.9198, lng: 77.6110 }, locationName: '16th Main Rd & Outer Ring Rd' }
     ],
     parkingLots: [
       { name: 'Lot A', position: { lat: 12.9200, lng: 77.6300 } },
@@ -84,7 +96,11 @@ const INDIA_CITIES = {
     zoom: 15,
     controllers: [
       { id: 'noida-62-1', name: 'Sector 62 Crossing A', position: { lat: 28.6225, lng: 77.3810 }, locationName: 'Sector 62 Main Crossing' },
-      { id: 'noida-62-2', name: 'Sector 62 Underpass Crossing B', position: { lat: 28.6185, lng: 77.3755 }, locationName: 'NH-24 Sector 62 Loop' }
+      { id: 'noida-62-2', name: 'Sector 62 Underpass Crossing B', position: { lat: 28.6185, lng: 77.3755 }, locationName: 'NH-24 Sector 62 Loop' },
+      { id: 'noida-62-3', name: 'Sector 62 Fortis Hospital Chowk C', position: { lat: 28.6198, lng: 77.3725 }, locationName: 'Fortis Hospital Rd' },
+      { id: 'noida-62-4', name: 'Sector 62 JSS Academy Junction D', position: { lat: 28.6215, lng: 77.3870 }, locationName: 'JSS Academy Rd' },
+      { id: 'noida-62-5', name: 'Sector 62 PM Mall Junction E', position: { lat: 28.6255, lng: 77.3800 }, locationName: 'NH-24 Service Lane Link' },
+      { id: 'noida-62-6', name: 'Sector 62 Park Crossing F', position: { lat: 28.6155, lng: 77.3790 }, locationName: 'Block C Crossing' }
     ],
     parkingLots: [
       { name: 'Lot A', position: { lat: 28.6240, lng: 77.3790 } },
