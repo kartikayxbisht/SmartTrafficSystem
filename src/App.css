@@ -2761,3 +2761,53 @@ input:checked+.slider:before {
   0%, 80%, 100% { transform: scale(0.2); opacity: 0.5; }
   40% { transform: scale(1); opacity: 1; }
 }
+
+/* AI Vision Analysis Styles */
+.vision-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--secondary);
+  box-shadow: 0 0 12px var(--secondary);
+  animation: scan-move 1.8s ease-in-out infinite;
+  z-index: 25;
+  pointer-events: none;
+}
+
+@keyframes scan-move {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.vision-log-terminal::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.vision-log-terminal::-webkit-scrollbar-track {
+  background: transparent;
+}
+.vision-log-terminal::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: 4px;
+}
+.vision-log-terminal::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.vision-monitor-frame canvas {
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}

@@ -346,6 +346,122 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
   }
 });
 
+// YOLO & OpenCV Vision Traffic Analysis API Endpoint
+app.post('/api/vision/analyze', (req, res) => {
+  const { preset, filename, image } = req.body;
+
+  // Simulated YOLO/OpenCV analysis response structures
+  const presetsData = {
+    'delhi-cp': {
+      vehicleCount: 10,
+      congestionLevel: 'Moderate',
+      laneOccupancy: [0.72, 0.45, 0.60],
+      inferenceTimeMs: 168,
+      detections: [
+        { class: 'car', bbox: [0.12, 0.45, 0.08, 0.07], confidence: 0.94 },
+        { class: 'car', bbox: [0.22, 0.52, 0.09, 0.08], confidence: 0.91 },
+        { class: 'car', bbox: [0.35, 0.48, 0.07, 0.06], confidence: 0.88 },
+        { class: 'bus', bbox: [0.55, 0.38, 0.14, 0.12], confidence: 0.95 },
+        { class: 'motorcycle', bbox: [0.08, 0.58, 0.04, 0.05], confidence: 0.82 },
+        { class: 'car', bbox: [0.72, 0.41, 0.06, 0.05], confidence: 0.90 },
+        { class: 'truck', bbox: [0.81, 0.32, 0.12, 0.14], confidence: 0.87 },
+        { class: 'car', bbox: [0.44, 0.56, 0.08, 0.08], confidence: 0.93 },
+        { class: 'car', bbox: [0.61, 0.50, 0.07, 0.07], confidence: 0.89 },
+        { class: 'motorcycle', bbox: [0.30, 0.61, 0.03, 0.04], confidence: 0.85 }
+      ]
+    },
+    'mumbai-expressway': {
+      vehicleCount: 16,
+      congestionLevel: 'High',
+      laneOccupancy: [0.88, 0.92, 0.68],
+      inferenceTimeMs: 214,
+      detections: [
+        { class: 'car', bbox: [0.05, 0.65, 0.11, 0.10], confidence: 0.96 },
+        { class: 'car', bbox: [0.18, 0.60, 0.10, 0.09], confidence: 0.93 },
+        { class: 'car', bbox: [0.30, 0.55, 0.08, 0.08], confidence: 0.92 },
+        { class: 'car', bbox: [0.42, 0.50, 0.07, 0.07], confidence: 0.90 },
+        { class: 'car', bbox: [0.52, 0.46, 0.06, 0.06], confidence: 0.89 },
+        { class: 'car', bbox: [0.62, 0.42, 0.05, 0.05], confidence: 0.88 },
+        { class: 'bus', bbox: [0.72, 0.35, 0.12, 0.12], confidence: 0.94 },
+        { class: 'truck', bbox: [0.02, 0.40, 0.09, 0.11], confidence: 0.86 },
+        { class: 'motorcycle', bbox: [0.48, 0.58, 0.03, 0.05], confidence: 0.84 },
+        { class: 'car', bbox: [0.55, 0.54, 0.08, 0.08], confidence: 0.91 },
+        { class: 'car', bbox: [0.65, 0.51, 0.07, 0.07], confidence: 0.90 },
+        { class: 'car', bbox: [0.75, 0.47, 0.06, 0.06], confidence: 0.87 },
+        { class: 'car', bbox: [0.83, 0.44, 0.05, 0.05], confidence: 0.85 },
+        { class: 'car', bbox: [0.15, 0.72, 0.13, 0.12], confidence: 0.97 },
+        { class: 'car', bbox: [0.32, 0.67, 0.11, 0.10], confidence: 0.94 },
+        { class: 'motorcycle', bbox: [0.27, 0.74, 0.04, 0.06], confidence: 0.83 }
+      ]
+    },
+    'blr-silkboard': {
+      vehicleCount: 6,
+      congestionLevel: 'Low',
+      laneOccupancy: [0.22, 0.15, 0.35],
+      inferenceTimeMs: 142,
+      detections: [
+        { class: 'car', bbox: [0.25, 0.45, 0.08, 0.07], confidence: 0.92 },
+        { class: 'car', bbox: [0.50, 0.48, 0.07, 0.06], confidence: 0.94 },
+        { class: 'motorcycle', bbox: [0.15, 0.55, 0.04, 0.05], confidence: 0.86 },
+        { class: 'car', bbox: [0.70, 0.42, 0.06, 0.05], confidence: 0.89 },
+        { class: 'truck', bbox: [0.80, 0.35, 0.11, 0.12], confidence: 0.91 },
+        { class: 'car', bbox: [0.38, 0.52, 0.08, 0.07], confidence: 0.88 }
+      ]
+    }
+  };
+
+  if (preset && presetsData[preset]) {
+    return res.status(200).json({ success: true, ...presetsData[preset] });
+  }
+
+  // Handle custom uploads with deterministic hashing to ensure consistency for the same image
+  let hash = 0;
+  const seedString = image || filename || 'random';
+  for (let i = 0; i < seedString.length && i < 500; i++) {
+    hash = (hash << 5) - hash + seedString.charCodeAt(i);
+    hash |= 0;
+  }
+  hash = Math.abs(hash);
+
+  const vehicleCount = (hash % 12) + 5; // 5 to 16 vehicles
+  const classes = ['car', 'motorcycle', 'car', 'bus', 'car', 'truck', 'motorcycle'];
+  const detections = [];
+
+  for (let i = 0; i < vehicleCount; i++) {
+    const classType = classes[(hash + i) % classes.length];
+    
+    // Distribute bboxes evenly on the roadway perspective
+    const x = 0.1 + ((i * 0.7) / vehicleCount) + ((hash % (i + 1)) * 0.005);
+    const y = 0.35 + ((i % 3) * 0.11) + ((hash % (i + 2)) * 0.002);
+    const w = 0.05 + ((i % 2) * 0.04) + (y * 0.05); // dynamic scaling to simulate depth
+    const h = w * 0.85;
+
+    // Normalise boundaries (0 to 1)
+    const normX = Math.min(Math.max(x, 0.01), 0.9);
+    const normY = Math.min(Math.max(y, 0.1), 0.85);
+    const normW = Math.min(w, 1.0 - normX);
+    const normH = Math.min(h, 1.0 - normY);
+
+    const confidence = parseFloat((0.75 + ((hash * (i + 1)) % 21) * 0.01).toFixed(2));
+    detections.push({ class: classType, bbox: [normX, normY, normW, normH], confidence });
+  }
+
+  const lane1 = parseFloat((0.2 + ((hash % 7) * 0.11)).toFixed(2));
+  const lane2 = parseFloat((0.15 + (((hash >> 2) % 8) * 0.10)).toFixed(2));
+  const lane3 = parseFloat((0.1 + (((hash >> 4) % 9) * 0.10)).toFixed(2));
+  const avgOccupancy = (lane1 + lane2 + lane3) / 3;
+  const congestionLevel = avgOccupancy > 0.70 ? 'High' : avgOccupancy > 0.35 ? 'Moderate' : 'Low';
+
+  return res.status(200).json({
+    success: true,
+    vehicleCount,
+    congestionLevel,
+    laneOccupancy: [lane1, lane2, lane3],
+    inferenceTimeMs: (hash % 100) + 120, // 120ms to 220ms
+    detections
+  });
+});
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {

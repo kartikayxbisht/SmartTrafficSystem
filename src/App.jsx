@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Parking from './pages/Parking';
 import Admin from './pages/Admin';
+import VisionAnalysis from './pages/VisionAnalysis';
 import Footer from './components/Footer';
 import LoginPortal from './pages/LoginPortal';
 import AdminNetworkCanvas from './components/AdminNetworkCanvas';
@@ -1393,6 +1394,8 @@ function App() {
             onStartCharging={handleStartCharging}
           />
         );
+      case 'vision':
+        return <VisionAnalysis />;
       case 'admin':
         return <Admin />;
       default:

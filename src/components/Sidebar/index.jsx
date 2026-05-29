@@ -6,13 +6,15 @@ import {
   Settings,
   Zap,
   LogOut,
+  Camera,
 } from 'lucide-react';
 
 const ALL_MENU_ITEMS = [
-  { id: 'home',      label: 'Overview',       icon: Home,     roles: ['user'] },
-  { id: 'dashboard', label: 'Signal Controls', icon: Cpu,      roles: ['admin'] },
-  { id: 'parking',   label: 'Smart Parking',   icon: MapPin,   roles: ['user'] },
-  { id: 'admin',     label: 'Configuration',   icon: Settings, roles: ['user'] },
+  { id: 'home',      label: 'Overview',        icon: Home,     roles: ['user'] },
+  { id: 'dashboard', label: 'Signal Controls',  icon: Cpu,      roles: ['admin'] },
+  { id: 'parking',   label: 'Smart Parking',    icon: MapPin,   roles: ['user'] },
+  { id: 'vision',    label: 'Vision Analysis',  icon: Camera,   roles: ['user', 'admin'] },
+  { id: 'admin',     label: 'Configuration',    icon: Settings, roles: ['user'] },
 ];
 
 const Sidebar = ({ activeTab, setActiveTab, role, loggedInUser, onLogout }) => {
