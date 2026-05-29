@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Calendar, User } from 'lucide-react';
 
-const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityName, INDIA_CITIES, role }) => {
+const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityName, INDIA_CITIES, role, isScrolled, scrollProgress }) => {
   const [timeString, setTimeString] = useState('');
 
   // Clock tick
@@ -26,7 +26,11 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
   };
 
   return (
-    <header className="navbar">
+    <header className={`navbar ${isScrolled ? 'navbar--scrolled' : ''}`}>
+      {/* Scroll Reading Progress Bar indicator */}
+      <div className="scroll-progress-container">
+        <div className="scroll-progress-bar" style={{ width: `${scrollProgress || 0}%` }} />
+      </div>
       <h2 className="nav-title">{getPageTitle()}</h2>
       
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

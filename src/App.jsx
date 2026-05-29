@@ -15,6 +15,8 @@ import Parking from './pages/Parking';
 import Admin from './pages/Admin';
 import Footer from './components/Footer';
 import LoginPortal from './pages/LoginPortal';
+import AdminNetworkCanvas from './components/AdminNetworkCanvas';
+import TrafficChatbot from './components/TrafficChatbot';
 import './App.css';
 
 const INDIA_CITIES = {
@@ -398,6 +400,37 @@ function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [activeTab, setActiveTab] = useState('home');
 
+  // Scroll states for Navbar UI/UX enhancement
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const mainContentRef = useRef(null);
+
+  // Smooth scroll to top when tab changes
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [activeTab]);
+
+  const handleScroll = (e) => {
+    const target = e.target;
+    const scrollableHeight = target.scrollHeight - target.clientHeight;
+    
+    // Set scroll progress percent (0 - 100)
+    if (scrollableHeight > 0) {
+      const percent = (target.scrollTop / scrollableHeight) * 100;
+      setScrollProgress(percent);
+    } else {
+      setScrollProgress(0);
+    }
+
+    // Set scroll status check (greater than 20px)
+    setIsScrolled(target.scrollTop > 20);
+  };
+
   const handleLogin = (selectedRole, userData) => {
     setRole(selectedRole);
     setLoggedInUser(userData);
@@ -408,6 +441,8 @@ function App() {
     setRole(null);
     setLoggedInUser(null);
     setActiveTab('home');
+    setIsScrolled(false);
+    setScrollProgress(0);
   };
 
   const token = 'mock-token'; // Fallback token since auth was removed
@@ -1412,7 +1447,8 @@ function App() {
       ))}
 
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} role={role} loggedInUser={loggedInUser} onLogout={handleLogout} />
-      <div className="main-content">
+      <div className={`main-content ${role ? 'main-content--logged-in' : ''}`} ref={mainContentRef} onScroll={handleScroll}>
+        {role && <AdminNetworkCanvas />}
         <Navbar 
           activeTab={activeTab} 
           socketConnected={socketConnected} 
@@ -1420,10 +1456,25 @@ function App() {
           setSelectedCityName={setSelectedCityName}
           INDIA_CITIES={INDIA_CITIES}
           role={role}
+          isScrolled={isScrolled}
+          scrollProgress={scrollProgress}
         />
         {renderContent()}
         <Footer />
       </div>
+
+      {/* Floating AI Traffic Assistant Chatbot */}
+      {role && (
+        <TrafficChatbot 
+          selectedCityName={selectedCityName}
+          selectedControllerId={selectedControllerId}
+          carsNS={carsNS}
+          carsEW={carsEW}
+          lotsData={lotsData}
+          INDIA_CITIES={INDIA_CITIES}
+          activeTab={activeTab}
+        />
+      )}
 
       {/* Floating Smart Toast Notifications Container */}
       <div className="toast-container">

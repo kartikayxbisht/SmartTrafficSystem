@@ -156,18 +156,10 @@ const Home = ({
         <div className="actions-card glass-panel">
           <h2>Quick Navigation</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '10px' }}>
-            Jump to traffic signal override matrices or smart parking slots booking.
+            Jump to smart parking slots booking or system configuration controls.
           </p>
 
           <div className="actions-list">
-            <button className="action-btn" onClick={() => setActiveTab('dashboard')}>
-              <Cpu size={18} style={{ color: 'var(--primary)' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1 }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Signal Control Center</span>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Manage intersections and override timings</span>
-              </div>
-              <ArrowRight size={16} style={{ color: 'var(--text-dim)' }} />
-            </button>
 
             <button className="action-btn" onClick={() => setActiveTab('parking')}>
               <Zap size={18} style={{ color: 'var(--secondary)' }} />
