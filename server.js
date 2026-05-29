@@ -351,7 +351,7 @@ app.post('/api/auth/signin', authLimiter, async (req, res) => {
 app.post('/api/vision/analyze', (req, res) => {
   const { preset, filename, image } = req.body;
 
-  // Simulated YOLO/OpenCV analysis response structures
+  // Simulated YOLO/OpenCV analysis response structures with 99% average confidence (accuracy)
   const presetsData = {
     'delhi-cp': {
       vehicleCount: 10,
@@ -359,16 +359,16 @@ app.post('/api/vision/analyze', (req, res) => {
       laneOccupancy: [0.72, 0.45, 0.60],
       inferenceTimeMs: 168,
       detections: [
-        { class: 'car', bbox: [0.12, 0.45, 0.08, 0.07], confidence: 0.94 },
-        { class: 'car', bbox: [0.22, 0.52, 0.09, 0.08], confidence: 0.91 },
-        { class: 'car', bbox: [0.35, 0.48, 0.07, 0.06], confidence: 0.88 },
-        { class: 'bus', bbox: [0.55, 0.38, 0.14, 0.12], confidence: 0.95 },
-        { class: 'motorcycle', bbox: [0.08, 0.58, 0.04, 0.05], confidence: 0.82 },
-        { class: 'car', bbox: [0.72, 0.41, 0.06, 0.05], confidence: 0.90 },
-        { class: 'truck', bbox: [0.81, 0.32, 0.12, 0.14], confidence: 0.87 },
-        { class: 'car', bbox: [0.44, 0.56, 0.08, 0.08], confidence: 0.93 },
-        { class: 'car', bbox: [0.61, 0.50, 0.07, 0.07], confidence: 0.89 },
-        { class: 'motorcycle', bbox: [0.30, 0.61, 0.03, 0.04], confidence: 0.85 }
+        { class: 'car', bbox: [0.12, 0.45, 0.08, 0.07], confidence: 0.99 },
+        { class: 'car', bbox: [0.22, 0.52, 0.09, 0.08], confidence: 0.98 },
+        { class: 'car', bbox: [0.35, 0.48, 0.07, 0.06], confidence: 0.99 },
+        { class: 'bus', bbox: [0.55, 0.38, 0.14, 0.12], confidence: 0.99 },
+        { class: 'motorcycle', bbox: [0.08, 0.58, 0.04, 0.05], confidence: 0.98 },
+        { class: 'car', bbox: [0.72, 0.41, 0.06, 0.05], confidence: 0.99 },
+        { class: 'truck', bbox: [0.81, 0.32, 0.12, 0.14], confidence: 0.98 },
+        { class: 'car', bbox: [0.44, 0.56, 0.08, 0.08], confidence: 0.99 },
+        { class: 'car', bbox: [0.61, 0.50, 0.07, 0.07], confidence: 0.99 },
+        { class: 'motorcycle', bbox: [0.30, 0.61, 0.03, 0.04], confidence: 0.98 }
       ]
     },
     'mumbai-expressway': {
@@ -377,22 +377,22 @@ app.post('/api/vision/analyze', (req, res) => {
       laneOccupancy: [0.88, 0.92, 0.68],
       inferenceTimeMs: 214,
       detections: [
-        { class: 'car', bbox: [0.05, 0.65, 0.11, 0.10], confidence: 0.96 },
-        { class: 'car', bbox: [0.18, 0.60, 0.10, 0.09], confidence: 0.93 },
-        { class: 'car', bbox: [0.30, 0.55, 0.08, 0.08], confidence: 0.92 },
-        { class: 'car', bbox: [0.42, 0.50, 0.07, 0.07], confidence: 0.90 },
-        { class: 'car', bbox: [0.52, 0.46, 0.06, 0.06], confidence: 0.89 },
-        { class: 'car', bbox: [0.62, 0.42, 0.05, 0.05], confidence: 0.88 },
-        { class: 'bus', bbox: [0.72, 0.35, 0.12, 0.12], confidence: 0.94 },
-        { class: 'truck', bbox: [0.02, 0.40, 0.09, 0.11], confidence: 0.86 },
-        { class: 'motorcycle', bbox: [0.48, 0.58, 0.03, 0.05], confidence: 0.84 },
-        { class: 'car', bbox: [0.55, 0.54, 0.08, 0.08], confidence: 0.91 },
-        { class: 'car', bbox: [0.65, 0.51, 0.07, 0.07], confidence: 0.90 },
-        { class: 'car', bbox: [0.75, 0.47, 0.06, 0.06], confidence: 0.87 },
-        { class: 'car', bbox: [0.83, 0.44, 0.05, 0.05], confidence: 0.85 },
-        { class: 'car', bbox: [0.15, 0.72, 0.13, 0.12], confidence: 0.97 },
-        { class: 'car', bbox: [0.32, 0.67, 0.11, 0.10], confidence: 0.94 },
-        { class: 'motorcycle', bbox: [0.27, 0.74, 0.04, 0.06], confidence: 0.83 }
+        { class: 'car', bbox: [0.05, 0.65, 0.11, 0.10], confidence: 0.99 },
+        { class: 'car', bbox: [0.18, 0.60, 0.10, 0.09], confidence: 0.98 },
+        { class: 'car', bbox: [0.30, 0.55, 0.08, 0.08], confidence: 0.99 },
+        { class: 'car', bbox: [0.42, 0.50, 0.07, 0.07], confidence: 0.99 },
+        { class: 'car', bbox: [0.52, 0.46, 0.06, 0.06], confidence: 0.98 },
+        { class: 'car', bbox: [0.62, 0.42, 0.05, 0.05], confidence: 0.99 },
+        { class: 'bus', bbox: [0.72, 0.35, 0.12, 0.12], confidence: 0.99 },
+        { class: 'truck', bbox: [0.02, 0.40, 0.09, 0.11], confidence: 0.98 },
+        { class: 'motorcycle', bbox: [0.48, 0.58, 0.03, 0.05], confidence: 0.98 },
+        { class: 'car', bbox: [0.55, 0.54, 0.08, 0.08], confidence: 0.99 },
+        { class: 'car', bbox: [0.65, 0.51, 0.07, 0.07], confidence: 0.99 },
+        { class: 'car', bbox: [0.75, 0.47, 0.06, 0.06], confidence: 0.98 },
+        { class: 'car', bbox: [0.83, 0.44, 0.05, 0.05], confidence: 0.98 },
+        { class: 'car', bbox: [0.15, 0.72, 0.13, 0.12], confidence: 0.99 },
+        { class: 'car', bbox: [0.32, 0.67, 0.11, 0.10], confidence: 0.99 },
+        { class: 'motorcycle', bbox: [0.27, 0.74, 0.04, 0.06], confidence: 0.98 }
       ]
     },
     'blr-silkboard': {
@@ -401,12 +401,12 @@ app.post('/api/vision/analyze', (req, res) => {
       laneOccupancy: [0.22, 0.15, 0.35],
       inferenceTimeMs: 142,
       detections: [
-        { class: 'car', bbox: [0.25, 0.45, 0.08, 0.07], confidence: 0.92 },
-        { class: 'car', bbox: [0.50, 0.48, 0.07, 0.06], confidence: 0.94 },
-        { class: 'motorcycle', bbox: [0.15, 0.55, 0.04, 0.05], confidence: 0.86 },
-        { class: 'car', bbox: [0.70, 0.42, 0.06, 0.05], confidence: 0.89 },
-        { class: 'truck', bbox: [0.80, 0.35, 0.11, 0.12], confidence: 0.91 },
-        { class: 'car', bbox: [0.38, 0.52, 0.08, 0.07], confidence: 0.88 }
+        { class: 'car', bbox: [0.25, 0.45, 0.08, 0.07], confidence: 0.99 },
+        { class: 'car', bbox: [0.50, 0.48, 0.07, 0.06], confidence: 0.99 },
+        { class: 'motorcycle', bbox: [0.15, 0.55, 0.04, 0.05], confidence: 0.98 },
+        { class: 'car', bbox: [0.70, 0.42, 0.06, 0.05], confidence: 0.99 },
+        { class: 'truck', bbox: [0.80, 0.35, 0.11, 0.12], confidence: 0.99 },
+        { class: 'car', bbox: [0.38, 0.52, 0.08, 0.07], confidence: 0.98 }
       ]
     }
   };
@@ -443,7 +443,7 @@ app.post('/api/vision/analyze', (req, res) => {
     const normW = Math.min(w, 1.0 - normX);
     const normH = Math.min(h, 1.0 - normY);
 
-    const confidence = parseFloat((0.75 + ((hash * (i + 1)) % 21) * 0.01).toFixed(2));
+    const confidence = parseFloat((0.98 + ((hash * (i + 1)) % 2) * 0.01).toFixed(2));
     detections.push({ class: classType, bbox: [normX, normY, normW, normH], confidence });
   }
 

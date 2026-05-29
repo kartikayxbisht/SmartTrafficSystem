@@ -20,6 +20,7 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
       case 'home': return 'System Overview';
       case 'dashboard': return 'Signal Control Center';
       case 'parking': return 'Parking Logistics';
+      case 'vision': return 'AI Vision Analysis';
       case 'admin': return 'System Configuration';
       default: return 'IntelliPark AI';
     }
@@ -35,8 +36,8 @@ const Navbar = ({ activeTab, socketConnected, selectedCityName, setSelectedCityN
       
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
 
-        {/* STATE Selector — Admin only */}
-        {role === 'admin' && INDIA_CITIES && (
+        {/* STATE Selector — Active for all logged-in sessions */}
+        {role && INDIA_CITIES && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>STATE:</span>
             <select 
