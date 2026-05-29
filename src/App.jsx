@@ -1464,7 +1464,7 @@ function App() {
       </div>
 
       {/* Floating AI Traffic Assistant Chatbot */}
-      {role && (
+      {role === 'user' && (
         <TrafficChatbot 
           selectedCityName={selectedCityName}
           selectedControllerId={selectedControllerId}
