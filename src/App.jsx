@@ -1384,14 +1384,13 @@ function App() {
   // Show login portal if not authenticated
   if (!role) {
     return (
-      <>
-        {/* Ambient Cursor Effects on Login Page too */}
+      <div className="app-container" style={{ display: 'block' }}>
         <div ref={cursorRingRef} className={`custom-cursor-aura ${cursorHovered ? 'hovered' : ''} ${cursorClicked ? 'clicked' : ''}`}></div>
         {ripples.map((ripple) => (
           <span key={ripple.id} className="click-ripple" style={{ left: ripple.x, top: ripple.y }} />
         ))}
         <LoginPortal onLogin={handleLogin} />
-      </>
+      </div>
     );
   }
 

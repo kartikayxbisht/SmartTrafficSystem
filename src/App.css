@@ -3,7 +3,8 @@
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  overflow: hidden;
   background-color: var(--bg-darker);
 }
 
@@ -11,6 +12,15 @@
   .app-container {
     grid-template-columns: 1fr;
   }
+}
+
+/* Main content column — right panel of the grid */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Sidebar Styling */
@@ -260,14 +270,12 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  overflow-y: auto;
-  max-height: calc(100vh - 80px);
+  flex: 1;
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
     padding: 20px;
-    max-height: none;
   }
 }
 
